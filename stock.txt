@@ -23,6 +23,8 @@ def Error(theta,x,y):
 
 data_size = 100
 alpha = 0.01
+grad_desc_Nstep = 200
+
 x_list = [x for x in range(100)]
 #print(x_list)
 y_list = [100]*100
@@ -43,12 +45,12 @@ try:
     a = si.get_live_price(company)
     counter += 1
     print(company,a)
-    tm.sleep(1)
+    tm.sleep(0.5)
 
     dazurot(y_list,a)
 
     #print(theta[1])
-    for j in range(200):
+    for j in range(grad_desc_Nstep):
       for i in range(len(x_list)):
         theta_old = theta
         theta[0] -= (alpha/(2.0*len(x_list)))* (hyp(theta_old,x_list[i])-y_list[i])
