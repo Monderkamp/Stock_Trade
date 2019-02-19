@@ -1,0 +1,10 @@
+from yahoo_fin import stock_info as si
+import time as tm
+while True:
+  a = si.get_live_price("TSLA")
+  b = si.get_live_price("ea")
+  print(a)
+  print(b)
+
+  tm.sleep(1)
+ 
