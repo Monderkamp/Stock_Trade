@@ -1,10 +1,20 @@
 from yahoo_fin import stock_info as si
 import time as tm
-while True:
-  a = si.get_live_price("TSLA")
-  b = si.get_live_price("ea")
-  print(a)
-  print(b)
 
-  tm.sleep(1)
- 
+with open('holdings.txt','r') as holdings:
+  A = holdings.readlines()
+print(A)
+Kapital = float(A[0][6:-1])
+print('fond = ',Kapital)
+
+try:
+  while True:
+    a = si.get_live_price("TSLA")
+    print(a)
+    tm.sleep(1)
+
+except KeyboardInterrupt:
+
+  print('process terminated')
+
+
