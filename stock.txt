@@ -5,7 +5,7 @@ with open('holdings.txt','r') as holdings:
   A = holdings.readlines()
 print(A)
 Kapital = float(A[0][6:-1])
-print('fond = ',Kapital)
+print(Kapital)
 
 try:
   while True:
