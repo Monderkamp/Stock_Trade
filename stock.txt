@@ -19,30 +19,51 @@ def Error(theta,x,y):
     E += (hyp(theta,x[i]) - y[i])* (hyp(theta,x[i]) - y[i])
   E /= (2*len(x))
   return E
-    
 
+def buy_all(Kapital,Vorhanden,Preis):
+  Anzahl = int(Kapital/Preis)
+  Vorhanden += Anzahl
+  Kapital -= Anzahl * Preis
+
+def sell_all(Kapital,Vorhanden,Preis):
+  Kapital += Vorhanden * Preis
+  Vorhanden = 0
+
+
+#-------------INPUT-------------
 data_size = 100
-alpha = 0.01
+alpha = 0.05
 grad_desc_Nstep = 200
+company = 'TSLA'
+trade_dist = 1.0 #distance to the hypothesis at which is traded relative to sq_Err 
+#-------------------------------
+
+Besitz = {}
+Besitz[company] = 0
 
 x_list = [x for x in range(100)]
 #print(x_list)
 y_list = [100]*100
-#print(len(y_list))
+last_idx = len(y_list)-1
 
 with open('holdings.txt','r') as holdings:
   A = holdings.readlines()
 
-print(A)
+#print(A)
 Kapital = float(A[0][6:-1])
+Anfangskapital = Kapital
+
+
+print(Besitz)
 print(Kapital)
 counter = 0
 theta = [100, 0]
 Err = 1e3
 try:
   while True:
-    company = 'ea'
+
     a = si.get_live_price(company)
+    
     counter += 1
     print(company,a)
     tm.sleep(0.5)
@@ -59,7 +80,23 @@ try:
     print('theta = ',theta)
     print('counter',counter,'\nError',Error(theta,x_list,y_list))	
     Err = Error(theta,x_list,y_list)
+    sq_Err = np.sqrt(Err)
+    if counter > 1.5*data_size:
+      if a - hyp(theta,x_list[last_idx]) > trade_dist*sq_Err:
+        sell_all(Kapital,Besitz[company], a)
+      elif a - hyp(theta,x_list[last_idx]) < -trade_dist*sq_Err:
+        buy_all(Kapital,Besitz[company], a)   
+
+    net_worth = Kapital + Besitz[company]*a
+    dMoney = net_worth - Anfangskapital
+    print('net worth:',net_worth,'hypothetical earnings:',dMoney)
+
+
+
 except KeyboardInterrupt:
-
+  sell_all(Kapital,Besitz[company], a)
+  print('earnings:', dMoney)
+  with open('holdings.txt','w') as holdings:
+    holdings.write('fund: %s' % (Kapital))    
+  
   print('process terminated')
-
