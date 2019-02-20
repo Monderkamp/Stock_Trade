@@ -41,7 +41,7 @@ data_size = 100
 alpha = 0.05
 grad_desc_Nstep = 200
 company = 'TSLA'
-trade_dist = 1.0 #distance to the hypothesis at which is traded relative to sq_Err
+trade_dist = 5.0 #distance to the hypothesis at which is traded relative to sq_Err
 sleep_time = 0.5 
 #-------------------------------
 
