@@ -29,7 +29,6 @@ def sell_all(Kapital,Vorhanden,Preis):
   Kapital += Vorhanden * Preis
   Vorhanden = 0
 
-
 #-------------INPUT-------------
 data_size = 100
 alpha = 0.05
@@ -53,7 +52,6 @@ with open('holdings.txt','r') as holdings:
 Kapital = float(A[0][6:-1])
 Anfangskapital = Kapital
 
-
 print(Besitz)
 print(Kapital)
 counter = 0
@@ -63,14 +61,11 @@ try:
   while True:
 
     a = si.get_live_price(company)
-    
     counter += 1
     print(company,a)
     tm.sleep(0.5)
-
     dazurot(y_list,a)
 
-    #print(theta[1])
     for j in range(grad_desc_Nstep):
       for i in range(len(x_list)):
         theta_old = theta
@@ -90,8 +85,6 @@ try:
     net_worth = Kapital + Besitz[company]*a
     dMoney = net_worth - Anfangskapital
     print('net worth:',net_worth,'hypothetical earnings:',dMoney)
-
-
 
 except KeyboardInterrupt:
   sell_all(Kapital,Besitz[company], a)
