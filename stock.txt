@@ -27,19 +27,25 @@ def buy_all(Kapital,Vorhanden,Preis):
   Vorhanden += Anzahl
   Kapital -= Anzahl * Preis
   print(Anzahl,'bought')
+  return [Kapital,Vorhanden]
 
 def sell_all(Kapital,Vorhanden,Preis):
-  Kapital += Vorhanden * Preis
+  sellNr = Vorhanden 
+  Kapital += sellNr * Preis
   Vorhanden = 0
-  print(Vorhanden,'sold')
+  print(sellNr ,'sold')
+  return [Kapital,Vorhanden]
+
 #-------------INPUT-------------
 data_size = 100
 alpha = 0.05
 grad_desc_Nstep = 200
 company = 'TSLA'
-trade_dist = 0.01 #distance to the hypothesis at which is traded relative to sq_Err
+trade_dist = 1.0 #distance to the hypothesis at which is traded relative to sq_Err
 sleep_time = 0.5 
 #-------------------------------
+
+
 
 Besitz = {}
 Besitz[company] = 0
@@ -80,13 +86,14 @@ try:
     print('counter',counter,'\nError',Error(theta,x_list,y_list))	
     Err = Error(theta,x_list,y_list)
     sq_Err = np.sqrt(Err)
-
+    
+    
     if counter > 1.5*data_size:
       if a - hyp(theta,x_list[last_idx]) > trade_dist*sq_Err:
-        sell_all(Kapital,Besitz[company], a)
+        Kapital, Besitz[company] = sell_all(Kapital,Besitz[company], a)
       elif a - hyp(theta,x_list[last_idx]) < -trade_dist*sq_Err:
-        buy_all(Kapital,Besitz[company], a)   
-
+        Kapital,Besitz[company] = buy_all(Kapital,Besitz[company], a)   
+    print(Kapital,Besitz[company])
     net_worth = Kapital + Besitz[company]*a
     dMoney = net_worth - Anfangskapital
     print('net worth:',net_worth,'hypothetical earnings:',dMoney)
