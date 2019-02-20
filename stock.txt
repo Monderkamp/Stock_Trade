@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from matplotlib import style
 import numpy as np
+import pandas
+
 
 def dazurot(Liste,add_val):
   for i in range(len(Liste)-1):
@@ -24,17 +26,19 @@ def buy_all(Kapital,Vorhanden,Preis):
   Anzahl = int(Kapital/Preis)
   Vorhanden += Anzahl
   Kapital -= Anzahl * Preis
+  print(Anzahl,'bought')
 
 def sell_all(Kapital,Vorhanden,Preis):
   Kapital += Vorhanden * Preis
   Vorhanden = 0
-
+  print(Vorhanden,'sold')
 #-------------INPUT-------------
 data_size = 100
 alpha = 0.05
 grad_desc_Nstep = 200
 company = 'TSLA'
-trade_dist = 1.0 #distance to the hypothesis at which is traded relative to sq_Err 
+trade_dist = 0.01 #distance to the hypothesis at which is traded relative to sq_Err
+sleep_time = 0.5 
 #-------------------------------
 
 Besitz = {}
@@ -59,11 +63,11 @@ theta = [100, 0]
 Err = 1e3
 try:
   while True:
-
+    #print(tm.gmtime())
     a = si.get_live_price(company)
     counter += 1
     print(company,a)
-    tm.sleep(0.5)
+    tm.sleep(sleep_time)
     dazurot(y_list,a)
 
     for j in range(grad_desc_Nstep):
@@ -76,6 +80,7 @@ try:
     print('counter',counter,'\nError',Error(theta,x_list,y_list))	
     Err = Error(theta,x_list,y_list)
     sq_Err = np.sqrt(Err)
+
     if counter > 1.5*data_size:
       if a - hyp(theta,x_list[last_idx]) > trade_dist*sq_Err:
         sell_all(Kapital,Besitz[company], a)
