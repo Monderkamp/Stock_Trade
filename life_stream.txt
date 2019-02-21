@@ -35,13 +35,12 @@ def make_emergency_file(Data):
       f.write(",".join(a))
       f.write('\n')
 #------INPUT------
-increment = 0.1  #Intervalle in denen Aktienpreise abgerufen werden in Sekunden
+increment = 5.0  #Intervalle in denen Aktienpreise abgerufen werden in Sekunden
 
 companies.append('TSLA') #Tesla
-#companies.append('AAPL') #Apple
-#companies.append('EA')   #Electronic Arts
-#companies.append('GOOG') #Google
-
+companies.append('AAPL') #Apple
+companies.append('EA')   #Electronic Arts
+companies.append('GOOG') #Google
 #-----------------
 Nachtruhe = 60*60*17.5    #17.5 Stunden Nachtruhe
 col_names = ['Zeit']
