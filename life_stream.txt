@@ -41,6 +41,12 @@ def make_emergency_file(Data):
 #------INPUT------
 increment = 5.0  #Intervalle in denen Aktienpreise abgerufen werden in Sekunden
 
+"""
+bei increment 5.0 und 4 Aktien ruft er ca alle 10 Sek. die Daten ab.
+d.h 1.25 Sekunden pro Abrufen (lokale Prozessor-rechenzeit nicht eingerechnet. aber die sollte minimal sein)
+"""
+
+
 companies.append('TSLA') #Tesla
 companies.append('AAPL') #Apple
 companies.append('EA')   #Electronic Arts
