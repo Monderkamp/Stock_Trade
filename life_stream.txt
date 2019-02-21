@@ -15,7 +15,6 @@ def get_time():
 
 def make_file(Data):
   [Zeit,Tag,Uhrzeit,Stunde,Minute,Sekunde] = get_time()
-
   with open(Tag + '.txt','w') as f:
     for line in AktienDaten:
       a = []
