@@ -15,8 +15,6 @@ import numpy as np
 import pandas as pd
 from yahoo_fin import stock_info as si
 
-
-
 check = True
 while check == True:
   PC_id = input('From which PC are you accessing this program?\nEnter T for Tobis PC,\
@@ -26,9 +24,7 @@ P for Pauls PC, R for Raspberri Pi and confirm with enter.\n')
     print('You are accessing with PC_id = %s' % (PC_id))
     check = False
   else:
-    print('Your input is invalid. Try again')
-
-    
+    print('Your input is invalid. Try again.')
 
 companies = []
 def get_time():
