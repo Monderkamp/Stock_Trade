@@ -66,9 +66,9 @@ try:
     Reihe = [Zeit]
     for company in companies:
       Reihe.append(si.get_live_price(company))
-    #print(Reihe)
+    print(Reihe)
     AktienDaten.append(Reihe)
-    print(AktienDaten)
+    #print(AktienDaten)
     if Stunde == 22:
       make_file(AktienDaten)
       AktienDaten = [col_names]
