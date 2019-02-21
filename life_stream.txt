@@ -1,3 +1,12 @@
+#------INPUT------
+increment = 5.0  #Intervalle in denen Aktienpreise abgerufen werden in Sekunden
+
+companies.append('TSLA') #Tesla
+companies.append('AAPL') #Apple
+companies.append('EA')   #Electronic Arts
+companies.append('GOOG') #Google
+#-----------------
+
 import time as tm
 import numpy as np
 import pandas as pd
@@ -34,14 +43,7 @@ def make_emergency_file(Data):
         a.append(str(b))
       f.write(",".join(a))
       f.write('\n')
-#------INPUT------
-increment = 5.0  #Intervalle in denen Aktienpreise abgerufen werden in Sekunden
 
-companies.append('TSLA') #Tesla
-companies.append('AAPL') #Apple
-companies.append('EA')   #Electronic Arts
-companies.append('GOOG') #Google
-#-----------------
 Nachtruhe = 60*60*17.5    #17.5 Stunden Nachtruhe
 col_names = ['Zeit']
 
