@@ -1,11 +1,77 @@
 import time as tm
 import numpy as np
+import pandas as pd
+from yahoo_fin import stock_info as si
 
+companies = []
+def get_time():
+  Zeit = tm.asctime(tm.localtime())
+  Tag = Zeit[-4:] + '_' + Zeit[4:7]+ '_' + Zeit[8:10] +  '_' + Zeit[0:3]  
+  Uhrzeit = Zeit[11:20]
+  Stunde = int(Uhrzeit[0:2])
+  Minute = int(Uhrzeit[3:5])
+  Sekunde = int(Uhrzeit[6:8])
+  return([Zeit,Tag,Uhrzeit,Stunde,Minute,Sekunde])
+
+def make_file(Data):
+  [Zeit,Tag,Uhrzeit,Stunde,Minute,Sekunde] = get_time()
+
+  with open(Tag + '.txt','w') as f:
+    for line in AktienDaten:
+      a = []
+      for b in line:
+        a.append(str(b))
+      f.write(",".join(a))
+      f.write('\n')
+
+def make_emergency_file(Data):
+  [Zeit,Tag,Uhrzeit,Stunde,Minute,Sekunde] = get_time()
+
+  with open(Tag + '_emergency.txt','w') as f:
+    for line in AktienDaten:
+      a = []
+      for b in line:
+        a.append(str(b))
+      f.write(",".join(a))
+      f.write('\n')
+#------INPUT------
+increment = 0.1  #Intervalle in denen Aktienpreise abgerufen werden in Sekunden
+
+companies.append('TSLA') #Tesla
+#companies.append('AAPL') #Apple
+#companies.append('EA')   #Electronic Arts
+#companies.append('GOOG') #Google
+
+#-----------------
+Nachtruhe = 60*60*17.5    #17.5 Stunden Nachtruhe
+col_names = ['Zeit']
+
+for company in companies:
+  col_names.append(company)
+print(col_names)
+
+AktienDaten = [col_names]
+#print(AktienDaten)
+#make_file(AktienDaten)
 
 try:
   while True:
-  Zeit = tm.gmtime()
-  print(Zeit)
+    
+    [Zeit,Tag,Uhrzeit,Stunde,Minute,Sekunde] = get_time()
+    
+    Reihe = [Zeit]
+    for company in companies:
+      Reihe.append(si.get_live_price(company))
+    #print(Reihe)
+    AktienDaten.append(Reihe)
+    print(AktienDaten)
+    if Stunde == 22:
+      make_file(AktienDaten)
+      AktienDaten = [col_names]
+      sleep(Nachtruhe)
+      
 
-
+    tm.sleep(increment)  
 except KeyboardInterrupt:
+  make_emergency_file(AktienDaten)
+  print('Program aborted')
