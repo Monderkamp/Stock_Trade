@@ -97,7 +97,8 @@ try:
     net_worth = Kapital + Besitz[company]*a
     dMoney = net_worth - Anfangskapital
     print('net worth:',net_worth,'hypothetical earnings:',dMoney)
-
+    #plt.plot(x_list,y_list)
+    #plt.show()
 except KeyboardInterrupt:
   sell_all(Kapital,Besitz[company], a)
   print('earnings:', dMoney)
