@@ -1,0 +1,11 @@
+import time as tm
+import numpy as np
+
+
+try:
+  while True:
+  Zeit = tm.gmtime()
+  print(Zeit)
+
+
+except KeyboardInterrupt:
