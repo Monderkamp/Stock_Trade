@@ -1,7 +1,34 @@
+"""
+bei increment 5.0 und 4 Aktien ruft er ca alle 10 Sek. die Daten ab.
+d.h 1.25 Sekunden pro Abrufen (lokale Prozessor-rechenzeit nicht eingerechnet. aber die sollte minimal sein)
+
+Nach 1:19h Laufzeit sind ca 48 kB Daten mit 4 Aktien entstanden. 
+Das entspricht 36 kB pro Stunde bei 4 Aktien + Uhrzeit. 
+Das sind ca 7kB pro Stunde pro Aktie und 7kB Pro Stunde fuer Uhrzeit
+
+Daten (D) pro Stunde ca. 
+D = (1 + n)*7kB,
+mit n = Anzahl der Aktien 
+"""
 import time as tm
 import numpy as np
 import pandas as pd
 from yahoo_fin import stock_info as si
+
+
+
+check = True
+while check == True:
+  PC_id = input('From which PC are you accessing this program?\nEnter T for Tobis PC,\
+P for Pauls PC, R for Raspberri Pi and confirm with enter.\n')
+  PC_id = PC_id.upper()
+  if PC_id == 'T' or PC_id == 'P' or PC_id == 'R':
+    print('You are accessing with PC_id = %s' % (PC_id))
+    check = False
+  else:
+    print('Your input is invalid. Try again')
+
+    
 
 companies = []
 def get_time():
@@ -13,17 +40,28 @@ def get_time():
   Sekunde = int(Uhrzeit[6:8])
   return([Zeit,Tag,Uhrzeit,Stunde,Minute,Sekunde])
 
-def make_file(Data):
+def make_file(Data, emergency = None):
   [Zeit,Tag,Uhrzeit,Stunde,Minute,Sekunde] = get_time()
-  with open(Tag + '.txt','w') as f:
+  
+  if emergency == None:
+    file_name = Tag + '_' +PC_id +'.txt'
+  elif emergency == True:
+    file_name = Tag + '_emergency' + '_' + PC_id + '.txt'
+
+  with open(file_name,'w') as f:
     for line in AktienDaten:
       a = []
       for b in line:
         a.append(str(b))
       f.write(",".join(a))
       f.write('\n')
-  print('file generated')
 
+  if emergency == None:
+    print('file generated')
+  elif emergency == True:
+    print('emergency file generated')
+
+"""
 def make_emergency_file(Data):
   [Zeit,Tag,Uhrzeit,Stunde,Minute,Sekunde] = get_time()
 
@@ -35,20 +73,21 @@ def make_emergency_file(Data):
       f.write(",".join(a))
       f.write('\n')
   print('emergency file generated')
+"""
+
+
 #------INPUT------
 increment = 5.0  #Intervalle in denen Aktienpreise abgerufen werden in Sekunden
-
-"""
-bei increment 5.0 und 4 Aktien ruft er ca alle 10 Sek. die Daten ab.
-d.h 1.25 Sekunden pro Abrufen (lokale Prozessor-rechenzeit nicht eingerechnet. aber die sollte minimal sein)
-"""
-
 
 companies.append('TSLA') #Tesla
 companies.append('AAPL') #Apple
 companies.append('EA')   #Electronic Arts
 companies.append('GOOG') #Google
 #-----------------
+
+
+
+
 
 Nachtruhe = 60*60*17.5    #17.5 Stunden Nachtruhe
 col_names = ['Zeit']
@@ -59,7 +98,7 @@ print(col_names)
 
 AktienDaten = [col_names]
 #print(AktienDaten)
-#make_file(AktienDaten)
+make_file(AktienDaten)
 
 try:
   while True:
@@ -80,5 +119,5 @@ try:
 
     tm.sleep(increment)  
 except KeyboardInterrupt:
-  make_emergency_file(AktienDaten)
+  make_file(AktienDaten,True)
   print('Program aborted')
