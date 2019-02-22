@@ -1,0 +1,9 @@
+zum runterladen: 
+git pull
+
+zum hochladen: 
+git add .
+git commit -m "irgendein Text"
+git push origin master
+
+
