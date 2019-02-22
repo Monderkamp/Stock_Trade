@@ -27,17 +27,27 @@ def get_time():
 
 def calc_time_until(StundeX,MinuteX,SekundeX):
   [Zeit,Tag,Uhrzeit,Stunde,Minute,Sekunde] = get_time()
-  dStunde = StundeX - Stunde
-  if dStunde < 0:
-    dStunde += 24
-  dMinute = MinuteX - Minute
-  if dMinute < 0:
-    dStunde -= 1
-    dMinute += 60
-  dSekunde = SekundeX - Sekunde
+
+  dStunde = 0
+  dMinute = 0
+  dSekunde = 0
+
+  dSekunde += SekundeX - Sekunde
+
   if dSekunde < 0:
     dMinute -= 1
     dSekunde += 60
+
+  dMinute += MinuteX - Minute
+
+  if dMinute < 0:
+    dStunde -= 1
+    dMinute += 60
+
+  dStunde += StundeX - Stunde
+  if dStunde < 0:
+    dStunde += 24
+
   return [dStunde,dMinute,dSekunde]
 
 def make_file(Data, emergency = None):
@@ -103,15 +113,18 @@ try:
     AktienDaten.append(Reihe)
 
     if (Stunde >= 22) or (Stunde <= 14 or (Stunde == 15 and Minute <= 29)):
-      [dH,dM,dS] = calc_time_until(15,30,00)
+      [H_wakeup, M_wakeup, S_wakeup] = [15,30,00]
+      [dH,dM,dS] = calc_time_until(H_wakeup,M_wakeup,S_wakeup)
+      print(dH,dM,dS)
       Schlafzeit = dS + 60*dM + 3600*dH
+      print(Schlafzeit)
       if len(AktienDaten) > 2: #sorgt dafuer dass er nur eine Datei schreibt, 
                                #wenn mehr als die col_names und eine Reihe in den Aktiendaten sind   
                                #sonst wuerde er auch eine Datei erstellen, wenn man ihn im Schlafmodus startet
 
         make_file(AktienDaten)                           
       AktienDaten = [col_names]
-      print('sleeping for %s hours, %s minutes and %s seconds until 15:30' % (dH,dM,dS))
+      print('sleeping for %s hours, %s minutes and %s seconds until %02d:%02d:%02d' % (dH,dM,dS,H_wakeup,M_wakeup,S_wakeup))
       sleeping = True
       tm.sleep(Schlafzeit)
       sleeping = False
