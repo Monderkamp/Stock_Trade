@@ -7,3 +7,9 @@ git commit -m "irgendein Text"
 git push origin master
 
 
+im terminal:
+
+clear (macht terminal fenster leer)
+cd (change directory)
+
+
