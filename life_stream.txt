@@ -15,7 +15,6 @@ import numpy as np
 import pandas as pd
 from yahoo_fin import stock_info as si
 
-
 def get_time():
   Zeit = tm.asctime(tm.localtime())
   Tag = Zeit[-4:] + '_' + Zeit[4:7]+ '_' + Zeit[8:10] +  '_' + Zeit[0:3]  
