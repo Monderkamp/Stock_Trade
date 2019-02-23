@@ -110,12 +110,17 @@ try:
       Reihe.append(si.get_live_price(company))
     print(Reihe)
     AktienDaten.append(Reihe)
+    #print('Tag:',Tag[-3:])
 
     if (Stunde >= 22) or (Stunde <= 14 or (Stunde == 15 and Minute <= 29)):
       [H_wakeup, M_wakeup, S_wakeup] = [15,30,00]
       [dH,dM,dS] = calc_time_until(H_wakeup,M_wakeup,S_wakeup)
-      #print(dH,dM,dS)
-      Schlafzeit = dS + 60*dM + 3600*dH
+
+      if Tag[-3:] == 'Fri': 
+        dH += 48               #Programm schläft automatisch 2 Tage Länger wenn es Freitag abend schlafen geht.
+                               #Hat allerdings keine Auswirkungen, wenn es am Wochenende manuell gestartet wird. 
+
+      Schlafzeit = dS + 60*dM + 3600*dH      
       #print(Schlafzeit)
       if len(AktienDaten) > 2: #sorgt dafuer dass er nur eine Datei schreibt, 
                                #wenn mehr als die col_names und eine Reihe in den Aktiendaten sind   
