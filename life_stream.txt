@@ -117,7 +117,7 @@ try:
       [dH,dM,dS] = calc_time_until(H_wakeup,M_wakeup,S_wakeup)
 
       if Tag[-3:] == 'Fri': 
-        dH += 48               #Programm schläft automatisch 2 Tage Länger wenn es Freitag abend schlafen geht.
+        dH += 48               #Programm schlaeft automatisch 2 Tage Laenger wenn es Freitag abend schlafen geht.
                                #Hat allerdings keine Auswirkungen, wenn es am Wochenende manuell gestartet wird. 
 
       Schlafzeit = dS + 60*dM + 3600*dH      
