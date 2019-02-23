@@ -117,12 +117,12 @@ try:
       [dH,dM,dS] = calc_time_until(H_wakeup,M_wakeup,S_wakeup)
 
       if Tag[-3:] == 'Fri': 
-        dH += 48               #Programm schläft automatisch 2 Tage Länger wenn es Freitag abend schlafen geht.
+        dH += 48               #Programm schlaeft automatisch 2 Tage laenger wenn es Freitag abend schlafen geht.
                                #Hat allerdings keine Auswirkungen, wenn es am Wochenende manuell gestartet wird. 
 
-      if Tag[-3:] == 'Sat':    #Wenn es doch Samstag gestartet wird schläft es von samstag abend bis Montag 
-        dH += 24               #Alternative wäre bei jeder Datenabfrage zu schauen ob Wochenende ist, würde aber 
-                               #jedes mal Prozessorzeit kosten. Außerdem schreibt es am WE keine Datei automatisch  
+      if Tag[-3:] == 'Sat':    #Wenn es doch Samstag gestartet wird schlaeft es von samstag abend bis Montag 
+        dH += 24               #Alternative waere bei jeder Datenabfrage zu schauen ob Wochenende ist, wuerde aber 
+                               #jedes mal Prozessorzeit kosten. Ausserdem schreibt es am WE keine Datei automatisch  
 
       Schlafzeit = dS + 60*dM + 3600*dH      
       #print(Schlafzeit)
