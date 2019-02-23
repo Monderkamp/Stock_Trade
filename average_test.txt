@@ -1,0 +1,5 @@
+a = [x for x in range(10)]
+print(a)
+def gleitender_Durchschnitt(Anzahl,Liste):
+  return sum(Liste[-Anzahl:])/Anzahl
+print(moving_average(4,a))
