@@ -72,8 +72,9 @@ def make_file(Data, emergency = None):
   elif emergency == True:
     print('emergency file generated')
 #------------------------------------------------------------------------
-def gleitender_Durchschnitt(Anzahl,Liste):
-  return sum(Liste[-Anzahl:])/Anzahl
+def gleitender_Durchschnitt(Anzahl,Tabelle,Spalte):
+  Tabelle = np.array(Tabelle)
+  return sum(Tabelle[-Anzahl:,Spalte])/Anzahl
 #------------------------------------------------------------------------
 check = True
 while check == True:
