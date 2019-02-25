@@ -1,0 +1,14 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+PHI = np.linspace(0,2*np.pi,200)
+#print(phi)
+
+def R(x):
+  return 1 + np.sin(x)
+
+x = [R(phi)*np.cos(phi) for phi in PHI]
+y = [R(phi)*np.sin(phi) for phi in PHI]
+
+plt.plot(x,y)
+plt.show()
