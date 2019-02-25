@@ -124,27 +124,26 @@ try:
       [dH,dM,dS] = calc_time_until(H_wakeup,M_wakeup,S_wakeup)
 
       if Tag[-3:] == 'Fri': 
-        dH += 48               
-"""
-Programm schlaeft automatisch 2 Tage laenger wenn es Freitag abend schlafen geht.
-Hat allerdings keine Auswirkungen, wenn es am Wochenende manuell gestartet wird. 
-"""
+        dH += 48      
+#Programm schlaeft automatisch 2 Tage laenger wenn es Freitag abend schlafen geht.
+#Hat allerdings keine Auswirkungen, wenn es am Wochenende manuell gestartet wird. 
+
       if Tag[-3:] == 'Sat':    
         dH += 24                
 
-"""                                
-Wenn es doch Samstag gestartet wird schlaeft es von samstag abend bis Montag 
-Alternative waere bei jeder Datenabfrage zu schauen ob Wochenende ist, wuerde aber 
-jedes mal Prozessorzeit kosten. Ausserdem schreibt es am WE keine Datei automatisch  
-"""
+                               
+#Wenn es doch Samstag gestartet wird schlaeft es von samstag abend bis Montag 
+#Alternative waere bei jeder Datenabfrage zu schauen ob Wochenende ist, wuerde aber 
+#jedes mal Prozessorzeit kosten. Ausserdem schreibt es am WE keine Datei automatisch  
+
       Schlafzeit = dS + 60*dM + 3600*dH      
       #print(Schlafzeit)
       if len(AktienDaten) > 2 and not(Tag[-3:] == 'Sat' or Tag[-3:] == 'Sun'): 
-"""
-sorgt dafuer dass er nur eine Datei schreibt, wenn mehr als die col_names 
-und eine Reihe in den Aktiendaten sind sonst wuerde er auch eine Datei erstellen, 
-wenn man ihn im Schlafmodus startet  
-"""
+
+#sorgt dafuer dass er nur eine Datei schreibt, wenn mehr als die col_names 
+#und eine Reihe in den Aktiendaten sind sonst wuerde er auch eine Datei erstellen, 
+#wenn man ihn im Schlafmodus startet  
+
         make_file(AktienDaten)                           
       AktienDaten = [col_names]
       print('AktienDaten-Array (Zwischenspeicher) geleert.')
@@ -162,9 +161,8 @@ except KeyboardInterrupt:
   elif sleeping == True:
     print('Program aborted.')
     print('No emergency file generated because program was sleeping.') 
-"""
-Programm erstellt sowieso file wenn es 
-schlafen geht. Oder es wurde schlafend
-gestartet und deswegen sind keine Daten
-vorhanden
-"""
+
+#Programm erstellt sowieso file wenn es 
+#schlafen geht. Oder es wurde schlafend
+#gestartet und deswegen sind keine Daten
+#vorhanden
