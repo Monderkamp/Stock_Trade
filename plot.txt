@@ -38,28 +38,28 @@ def get_data(S):
 #printlines(D)
 #Zeit,TSLA,AAPL,EA,GOOG
 
-
+plt.subplot(2,2,1)
 plt.plot(T,D[:,0])
 plt.legend(['TSLA'])
 plt.xlabel('T in hours')
 plt.ylabel('Stock value in \$')
-plt.show()
 
 
+plt.subplot(2,2,2)
 plt.plot(T,D[:,1])
 plt.legend(['AAPL'])
 plt.xlabel('T in hours')
 plt.ylabel('Stock value in \$')
-plt.show()
 
 
+plt.subplot(2,2,3)
 plt.plot(T,D[:,2])
 plt.legend(['EA'])
 plt.xlabel('T in hours')
 plt.ylabel('Stock value in \$')
-plt.show()
 
 
+plt.subplot(2,2,4)
 plt.plot(T,D[:,3])
 plt.legend(['GOOG'])
 plt.xlabel('T in hours')
