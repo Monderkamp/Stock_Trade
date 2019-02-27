@@ -4,7 +4,7 @@ import numpy as np
 
 #Zeit,TSLA,AAPL,EA,GOOG
 
-S = "2019_Feb_26_Tue_P.txt"
+S = "2019_Feb_27_Wed_P.txt"
 
 def printlines(A):
   for line in A:
