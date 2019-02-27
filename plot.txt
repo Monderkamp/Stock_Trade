@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+
 #Zeit,TSLA,AAPL,EA,GOOG
 
 S = "2019_Feb_26_Tue_P.txt"
