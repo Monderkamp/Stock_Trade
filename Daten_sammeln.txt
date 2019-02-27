@@ -81,7 +81,7 @@ while check == True:
   PC_id = input('From which PC are you accessing this program?\nEnter T for Tobis PC, \
 P for Pauls PC, L for Linux-PC and confirm with enter.\n')
   PC_id = PC_id.upper()
-  if PC_id == 'T' or PC_id == 'P' or PC_id == 'R':
+  if PC_id == 'T' or PC_id == 'P' or PC_id == 'L':
     print('You are accessing with PC_id = %s' % (PC_id))
     check = False
   else:
