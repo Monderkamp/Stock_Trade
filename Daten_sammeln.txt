@@ -77,6 +77,7 @@ def gleitender_Durchschnitt(Anzahl,Tabelle,Spalte):
   Tabelle = np.array(Tabelle)
   return sum(Tabelle[-Anzahl:,Spalte])/Anzahl
 #------------------------------------------------------------------------
+"""
 while True:
   PC_id = input('From which PC are you accessing this program?\nEnter T for Tobis PC, \
 P for Pauls PC, L for Linux-PC and confirm with enter.\n')
@@ -87,7 +88,7 @@ P for Pauls PC, L for Linux-PC and confirm with enter.\n')
   else:
     print()
     print('Your input is invalid. Try again.\n')
-
+"""
 companies = []
 #------------------------------------------------------------------------
 #---------------------------------INPUT----------------------------------
