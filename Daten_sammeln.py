@@ -123,7 +123,7 @@ try:
     AktienDaten.append(Reihe)
     #print('Tag:',Tag[-3:])
 
-    if (Stunde >= 22) or (Stunde <= 14 or (Stunde == 15 and Minute <= 29)):
+    if (Stunde >= 22) or (Stunde <= 14) or (Stunde == 15 and Minute <= 29):
       [H_wakeup, M_wakeup, S_wakeup] = [15,30,00]
       [dH,dM,dS] = calc_time_until(H_wakeup,M_wakeup,S_wakeup)
 
