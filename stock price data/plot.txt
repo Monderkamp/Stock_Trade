@@ -65,12 +65,16 @@ pL = np.arange(long_range,len(T))
 
 def buy_all(Kapital,Preis,Anzahl):
   Kauf_Anzahl = int(Kapital/Preis)
+  if Kauf_Anzahl > 0:
+    print('KAUF')
   Kapital -= Preis * Kauf_Anzahl
   Anzahl = Anzahl + Kauf_Anzahl
   return [Kapital,Anzahl]
 
 def sell_all(Kapital,Preis,Anzahl):
   Verkauf_Anzahl = Anzahl
+  if Verauf_Anzahl > 0:
+    print('VERKAUF')
   Kapital += Preis * Verkauf_Anzahl
   Anzahl = Anzahl - Verkauf_Anzahl
   return [Kapital,Anzahl]
