@@ -63,37 +63,43 @@ long_range = 90
 
 pL = np.arange(long_range,len(T))
 
-def buy_all(Kapital,Preis,Anzahl):
+def buy_all(Kapital,Preis,Anzahl,KC):
   Kauf_Anzahl = int(Kapital/Preis)
   if Kauf_Anzahl > 0:
     print('KAUF')
+    KC += 1
   Kapital -= Preis * Kauf_Anzahl
   Anzahl = Anzahl + Kauf_Anzahl
-  return [Kapital,Anzahl]
+  return [Kapital,Anzahl,KC]
 
 def sell_all(Kapital,Preis,Anzahl):
   Verkauf_Anzahl = Anzahl
-  if Verauf_Anzahl > 0:
+  if Verkauf_Anzahl > 0:
     print('VERKAUF')
   Kapital += Preis * Verkauf_Anzahl
   Anzahl = Anzahl - Verkauf_Anzahl
   return [Kapital,Anzahl]
 Gewinn = 0
+KCges = 0
 for Aktie in range(4):
   Kapital = 10000
   Kapital0 = 10000
+  KC = 0
   Anzahl = 0
   for i in range(0,len(T)):
     SMA_short[i] = SMA(short_range,D,Aktie,i)
     SMA_long[i] = SMA(long_range,D,Aktie,i)
     if (SMA_short[i] > SMA_long[i]):
-      [Kapital,Anzahl] = buy_all(Kapital,D[i,Aktie],Anzahl)
+      [Kapital,Anzahl,KC] = buy_all(Kapital,D[i,Aktie],Anzahl,KC)
     if (SMA_short[i] < SMA_long[i]):
       [Kapital,Anzahl] = sell_all(Kapital,D[i,Aktie],Anzahl)
   NW = Kapital + Anzahl * D[len(T)-1,Aktie]
   #print('net worth: ',NW)
+  print(KC)
   Gewinn += (NW - Kapital0)
+  KCges += KC
 
+print('KCges: ',KCges)
 print('Gewinn: ',Gewinn)
 print('relativer Gewinn: ',Gewinn/Kapital0)
 
