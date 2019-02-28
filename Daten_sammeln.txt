@@ -53,9 +53,9 @@ def make_file(Data, emergency = None):
   [Zeit,Tag,Uhrzeit,Stunde,Minute,Sekunde] = get_time()
   
   if emergency == None or emergency == False:
-    file_name = Tag + '_' +PC_id +'.txt'
+    file_name = Tag[0:11] + '_stock_data.txt'
   elif emergency == True:
-    file_name = Tag + '_emergency' + '_' + PC_id + '.txt'
+    file_name = Tag[0:11] + '_emergency' + '_stock_data.txt'
   else:
     print('invalid use of emergency parameter in function make_file.')
 
@@ -71,12 +71,12 @@ def make_file(Data, emergency = None):
     print('file generated')
   elif emergency == True:
     print('emergency file generated')
+
 #------------------------------------------------------------------------
 def gleitender_Durchschnitt(Anzahl,Tabelle,Spalte):
   Tabelle = np.array(Tabelle)
   return sum(Tabelle[-Anzahl:,Spalte])/Anzahl
 #------------------------------------------------------------------------
-
 while True:
   PC_id = input('From which PC are you accessing this program?\nEnter T for Tobis PC, \
 P for Pauls PC, L for Linux-PC and confirm with enter.\n')
@@ -89,7 +89,6 @@ P for Pauls PC, L for Linux-PC and confirm with enter.\n')
     print('Your input is invalid. Try again.\n')
 
 companies = []
-
 #------------------------------------------------------------------------
 #---------------------------------INPUT----------------------------------
 #------------------------------------------------------------------------
@@ -125,25 +124,13 @@ try:
 
       if Tag[-3:] == 'Fri': 
         dH += 48      
-#Programm schlaeft automatisch 2 Tage laenger wenn es Freitag abend schlafen geht.
-#Hat allerdings keine Auswirkungen, wenn es am Wochenende manuell gestartet wird. 
 
       if Tag[-3:] == 'Sat':    
         dH += 24                
 
-                               
-#Wenn es doch Samstag gestartet wird schlaeft es von samstag abend bis Montag 
-#Alternative waere bei jeder Datenabfrage zu schauen ob Wochenende ist, wuerde aber 
-#jedes mal Prozessorzeit kosten. Ausserdem schreibt es am WE keine Datei automatisch  
-
       Schlafzeit = dS + 60*dM + 3600*dH      
       #print(Schlafzeit)
       if len(AktienDaten) > 2 and not(Tag[-3:] == 'Sat' or Tag[-3:] == 'Sun'): 
-
-#sorgt dafuer dass er nur eine Datei schreibt, wenn mehr als die col_names 
-#und eine Reihe in den Aktiendaten sind sonst wuerde er auch eine Datei erstellen, 
-#wenn man ihn im Schlafmodus startet  
-
         make_file(AktienDaten)                           
       AktienDaten = [col_names]
       print('AktienDaten-Array (Zwischenspeicher) geleert.')
@@ -162,7 +149,4 @@ except KeyboardInterrupt:
     print('Program aborted.')
     print('No emergency file generated because program was sleeping.') 
 
-#Programm erstellt sowieso file wenn es 
-#schlafen geht. Oder es wurde schlafend
-#gestartet und deswegen sind keine Daten
-#vorhanden
+
