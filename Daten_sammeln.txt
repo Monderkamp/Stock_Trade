@@ -14,6 +14,8 @@ import time as tm
 import numpy as np
 import pandas as pd
 from yahoo_fin import stock_info as si
+
+directory = '/home/gnadt/GitHub Repositories/Stock_Trade/stock price data/'
 #------------------------------------------------------------------------
 def get_time():
   Zeit = tm.asctime(tm.localtime())
@@ -58,7 +60,7 @@ def make_file(Data, emergency = None):
     file_name = Tag[0:11] + '_emergency' + '_stock_data.txt'
   else:
     print('invalid use of emergency parameter in function make_file.')
-
+  file_name = directory + file_name
   with open(file_name,'w') as f:
     for line in AktienDaten:
       a = []
@@ -99,6 +101,8 @@ companies.append('TSLA') #Tesla
 companies.append('AAPL') #Apple
 companies.append('EA')   #Electronic Arts
 companies.append('GOOG') #Google
+
+
 #------------------------------------------------------------------------
 sleeping = False
 col_names = ['Zeit']     #names of columns in table
