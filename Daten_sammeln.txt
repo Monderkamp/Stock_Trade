@@ -51,7 +51,7 @@ def calc_time_until(StundeX,MinuteX,SekundeX):
 
   return [dStunde,dMinute,dSekunde]
 #------------------------------------------------------------------------
-def make_file(Data, emergency = None,PC_id):
+def make_file(Data,PC_id,emergency = None):
   [Zeit,Tag,Uhrzeit,Stunde,Minute,Sekunde] = get_time()
   
   if emergency == None or emergency == False:
@@ -136,7 +136,7 @@ try:
       Schlafzeit = dS + 60*dM + 3600*dH      
       #print(Schlafzeit)
       if len(AktienDaten) > 2 and not(Tag[-3:] == 'Sat' or Tag[-3:] == 'Sun'): 
-        make_file(AktienDaten,False,PC_id)                           
+        make_file(AktienDaten,PC_id,False)                           
       AktienDaten = [col_names]
       print('AktienDaten-Array (Zwischenspeicher) geleert.')
       print('sleeping for %s hours, %s minutes and %s seconds until %02d:%02d:%02d' % (dH,dM,dS,H_wakeup,M_wakeup,S_wakeup))
@@ -148,7 +148,7 @@ try:
 
 except KeyboardInterrupt:
   if sleeping == False:
-    make_file(AktienDaten,True,PC_id)
+    make_file(AktienDaten,PC_id,True)
     print('Program aborted')
   elif sleeping == True:
     print('Program aborted.')
