@@ -51,7 +51,7 @@ def calc_time_until(StundeX,MinuteX,SekundeX):
 
   return [dStunde,dMinute,dSekunde]
 #------------------------------------------------------------------------
-def make_file(Data, emergency = None):
+def make_file(Data, emergency = None,PC_id):
   [Zeit,Tag,Uhrzeit,Stunde,Minute,Sekunde] = get_time()
   
   if emergency == None or emergency == False:
@@ -60,7 +60,8 @@ def make_file(Data, emergency = None):
     file_name = Tag[0:11] + '_emergency' + '_stock_data.txt'
   else:
     print('invalid use of emergency parameter in function make_file.')
-  file_name = directory + file_name
+  if PC_id == 'L':
+    file_name = directory + file_name
   with open(file_name,'w') as f:
     for line in AktienDaten:
       a = []
@@ -79,7 +80,7 @@ def gleitender_Durchschnitt(Anzahl,Tabelle,Spalte):
   Tabelle = np.array(Tabelle)
   return sum(Tabelle[-Anzahl:,Spalte])/Anzahl
 #------------------------------------------------------------------------
-"""
+
 while True:
   PC_id = input('From which PC are you accessing this program?\nEnter T for Tobis PC, \
 P for Pauls PC, L for Linux-PC and confirm with enter.\n')
@@ -89,8 +90,7 @@ P for Pauls PC, L for Linux-PC and confirm with enter.\n')
     break
   else:
     print()
-    print('Your input is invalid. Try again.\n')
-"""
+
 companies = []
 #------------------------------------------------------------------------
 #---------------------------------INPUT----------------------------------
@@ -136,7 +136,7 @@ try:
       Schlafzeit = dS + 60*dM + 3600*dH      
       #print(Schlafzeit)
       if len(AktienDaten) > 2 and not(Tag[-3:] == 'Sat' or Tag[-3:] == 'Sun'): 
-        make_file(AktienDaten)                           
+        make_file(AktienDaten,False,PC_id)                           
       AktienDaten = [col_names]
       print('AktienDaten-Array (Zwischenspeicher) geleert.')
       print('sleeping for %s hours, %s minutes and %s seconds until %02d:%02d:%02d' % (dH,dM,dS,H_wakeup,M_wakeup,S_wakeup))
@@ -148,7 +148,7 @@ try:
 
 except KeyboardInterrupt:
   if sleeping == False:
-    make_file(AktienDaten,True)
+    make_file(AktienDaten,True,PC_id)
     print('Program aborted')
   elif sleeping == True:
     print('Program aborted.')
