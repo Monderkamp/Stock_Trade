@@ -1,14 +1,19 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+
+
+
 #Zeit,TSLA,AAPL,EA,GOOG
 
-S = "2019_Feb_27_stock_data.txt"
-
+#S = "2019_Feb_26_stock_data.txt"
+#S = "2019_Feb_27_stock_data.txt"
+S = '2019_Mar_1_stock_data.txt'
+#------------------------------------------------------------------------------------
 def printlines(A):
   for line in A:
     print(line)
-
+#------------------------------------------------------------------------------------
 def get_data(S):
   A = []
   with open(S,'r') as f:
@@ -20,6 +25,7 @@ def get_data(S):
   T = []
   for idx,item in enumerate(A):
     line = item.split(' ')
+    print(line)
     T.append(line[3])
     B.append(line[4])
 
@@ -33,10 +39,77 @@ def get_data(S):
     T[idx] = float(T[idx][0:2]) + float(T[idx][3:5])/60 + float(T[idx][6:])/3600
   T = np.array(T)
   return [T,B]
-[T,D] = get_data(S)  
+#------------------------------------------------------------------------------------
+def SMA(Anzahl,Tabelle,Spalte,index):
+  Tabelle = np.array(Tabelle)
+  #print(sum(Tabelle[-Anzahl+1+index:index+1,Spalte])/Anzahl)
+  return sum(Tabelle[-Anzahl+1+index:index+1,Spalte])/Anzahl
+#------------------------------------------------------------------------------------
+
+[T,D] = get_data(S)
+
+pL = np.arange(100,len(T))
+  
 #printlines(T)
 #printlines(D)
 #Zeit,TSLA,AAPL,EA,GOOG
+
+#plt.subplot(2,2,1)
+SMA_short = np.zeros(len(T))
+SMA_long = np.zeros(len(T))
+#print(SMA)
+short_range = 60
+long_range = 90
+#print(len(T))
+
+
+pL = np.arange(long_range,len(T))
+
+def buy_all(Kapital,Preis,Anzahl,KC):
+  Kauf_Anzahl = int(Kapital/Preis)
+  if Kauf_Anzahl > 0:
+    #print('KAUF')
+    KC += 1
+  Kapital -= Preis * Kauf_Anzahl
+  Anzahl = Anzahl + Kauf_Anzahl
+  return [Kapital,Anzahl,KC]
+
+def sell_all(Kapital,Preis,Anzahl):
+  Verkauf_Anzahl = Anzahl
+  #if Verkauf_Anzahl > 0:
+    #print('VERKAUF')
+  Kapital += Preis * Verkauf_Anzahl
+  Anzahl = Anzahl - Verkauf_Anzahl
+  return [Kapital,Anzahl]
+Gewinn = 0
+KCges = 0
+for Aktie in range(4):
+  Kapital = 10000
+  Kapital0 = 10000
+  KC = 0
+  Anzahl = 0
+  for i in range(0,len(T)):
+    SMA_short[i] = SMA(short_range,D,Aktie,i)
+    SMA_long[i] = SMA(long_range,D,Aktie,i)
+    if (SMA_short[i] > SMA_long[i]):
+      [Kapital,Anzahl,KC] = buy_all(Kapital,D[i,Aktie],Anzahl,KC)
+    if (SMA_short[i] < SMA_long[i]):
+      [Kapital,Anzahl] = sell_all(Kapital,D[i,Aktie],Anzahl)
+  NW = Kapital + Anzahl * D[len(T)-1,Aktie]
+  #print('net worth: ',NW)
+  print(KC)
+  Gewinn += (NW - Kapital0)
+  KCges += KC
+
+print('KCges: ',KCges)
+print('Gewinn: ',Gewinn)
+print('relativer Gewinn: ',Gewinn/Kapital0)
+
+"""
+plt.plot(T[pL],D[pL,Aktie])
+plt.plot(T[pL],SMA_short[pL])
+plt.plot(T[pL],SMA_long[pL])
+"""
 
 plt.subplot(2,2,1)
 plt.plot(T,D[:,0])
@@ -44,6 +117,10 @@ plt.legend(['TSLA'])
 plt.xlabel('T in hours')
 plt.ylabel('Stock value in \$')
 
+
+plt.legend(['TSLA'])
+plt.xlabel('T in hours')
+plt.ylabel('Stock value in \$')
 
 plt.subplot(2,2,2)
 plt.plot(T,D[:,1])
@@ -64,5 +141,5 @@ plt.plot(T,D[:,3])
 plt.legend(['GOOG'])
 plt.xlabel('T in hours')
 plt.ylabel('Stock value in \$')
-plt.show()
 
+plt.show()
