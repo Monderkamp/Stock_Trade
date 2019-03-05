@@ -116,7 +116,7 @@ AktienDaten = [col_names]
 try:
   while True:
     [Zeit,Tag,Uhrzeit,Stunde,Minute,Sekunde] = get_time()
-    Reihe = [Zeit]
+    Reihe = [Uhrzeit]
     for company in companies:
       Reihe.append(si.get_live_price(company))
     print(Reihe)
