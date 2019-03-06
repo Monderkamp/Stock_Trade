@@ -91,7 +91,8 @@ PB for Pauls Uni Buero, L for Linux-PC, P for Pauls PC and confirm with enter.\n
     break
   else:
     print()
-init_sleep = int(intput('set initial sleep timer:'))
+init_sleep = int(intput('set initial sleep timer in hours:'))
+tm.sleep(init_sleep*3600)
 companies = []
 #------------------------------------------------------------------------
 #---------------------------------INPUT----------------------------------
