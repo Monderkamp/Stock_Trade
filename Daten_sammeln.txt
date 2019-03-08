@@ -91,9 +91,7 @@ PB for Pauls Uni Buero, L for Linux-PC, P for Pauls PC and confirm with enter.\n
     break
   else:
     print()
-init_sleep = int(input('set initial sleep timer in hours:'))
-print('sleeping for %s hours' % (init_sleep))
-tm.sleep(init_sleep*3600)
+
 companies = []
 #------------------------------------------------------------------------
 #---------------------------------INPUT----------------------------------
@@ -118,39 +116,40 @@ AktienDaten = [col_names]
 
 try:
   while True:
-    try:
-      [Zeit,Tag,Uhrzeit,Stunde,Minute,Sekunde] = get_time()
-      Reihe = [Uhrzeit]
-      for company in companies:
-        Reihe.append(si.get_live_price(company))
-      print(Reihe)
-      AktienDaten.append(Reihe)
-      #print('Tag:',Tag[-3:])
+	try:
+	  [Zeit,Tag,Uhrzeit,Stunde,Minute,Sekunde] = get_time()
+	  Reihe = [Uhrzeit]
+	  for company in companies:
+		Reihe.append(si.get_live_price(company))
+	  print(Reihe)
+	  AktienDaten.append(Reihe)
+	  #print('Tag:',Tag[-3:])
   
-      if (Stunde >= 22) or (Stunde <= 14) or (Stunde == 15 and Minute <= 29):
-        [H_wakeup, M_wakeup, S_wakeup] = [15,30,00]
-        [dH,dM,dS] = calc_time_until(H_wakeup,M_wakeup,S_wakeup)
+	  if (Stunde >= 22) or (Stunde <= 14) or (Stunde == 15 and Minute <= 29):
+		[H_wakeup, M_wakeup, S_wakeup] = [15,30,00]
+		[dH,dM,dS] = calc_time_until(H_wakeup,M_wakeup,S_wakeup)
 
-        if Tag[-3:] == 'Fri': 
-          dH += 48      
+		if Tag[-3:] == 'Fri': 
+		  dH += 48      
 
-        if Tag[-3:] == 'Sat':    
-        dH += 24                
+		if Tag[-3:] == 'Sat':    
+		  dH += 24                
 
-        Schlafzeit = dS + 60*dM + 3600*dH      
-        #print(Schlafzeit)
-        if len(AktienDaten) > 2 and not(Tag[-3:] == 'Sat' or Tag[-3:] == 'Sun'): 
-          make_file(AktienDaten,PC_id,False)                           
-        AktienDaten = [col_names]
-        print('AktienDaten-Array (Zwischenspeicher) geleert.')
-        print('sleeping for %s hours, %s minutes and %s seconds until %02d:%02d:%02d' % (dH,dM,dS,H_wakeup,M_wakeup,S_wakeup))
-        sleeping = True
-        tm.sleep(Schlafzeit)
-        sleeping = False
+		Schlafzeit = dS + 60*dM + 3600*dH      
+		#print(Schlafzeit)
+		if len(AktienDaten) > 2 and not(Tag[-3:] == 'Sat' or Tag[-3:] == 'Sun'): 
+		  make_file(AktienDaten,PC_id,False)                           
+		AktienDaten = [col_names]
+		print('AktienDaten-Array (Zwischenspeicher) geleert.')
+		print('sleeping for %s hours, %s minutes and %s seconds until %02d:%02d:%02d' % (dH,dM,dS,H_wakeup,M_wakeup,S_wakeup))
+		sleeping = True
+		tm.sleep(Schlafzeit)
+		sleeping = False
       
-      tm.sleep(increment)  
-    except:
-      continue
+	  tm.sleep(increment)  
+	except:
+	  continue
+	  
 except KeyboardInterrupt:
   if sleeping == False:
     make_file(AktienDaten,PC_id,True)
