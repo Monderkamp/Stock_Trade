@@ -15,7 +15,7 @@ import numpy as np
 import pandas as pd
 from yahoo_fin import stock_info as si
 
-directory = '/home/gnadt/GitHub Repositories/Stock_Trade/stock price data/'
+directories = { 'L':'/home/gnadt/GitHub Repositories/Stock_Trade/stock price data/', 'PB':'/home/monderkamp/Paul Monderkamp/Stock_Trade/stock price data/Daten von Uni Buero/'} 
 #------------------------------------------------------------------------
 def get_time():
   Zeit = tm.asctime(tm.localtime())
@@ -60,8 +60,9 @@ def make_file(Data,PC_id,emergency = None):
     file_name = Tag[0:11] + '_emergency' + '_stock_data.txt'
   else:
     print('invalid use of emergency parameter in function make_file.')
-  if PC_id == 'L':
-    file_name = directory + file_name
+  if PC_id == 'L' or PC_id == 'PB':
+    file_name = directories[PC_id] + file_name
+
   with open(file_name,'w') as f:
     for line in AktienDaten:
       a = []
@@ -83,9 +84,9 @@ def gleitender_Durchschnitt(Anzahl,Tabelle,Spalte):
 
 while True:
   PC_id = input('From which PC are you accessing this program?\nEnter T for Tobis PC, \
-P for Pauls PC, L for Linux-PC and confirm with enter.\n')
+PB for Pauls Uni Buero, L for Linux-PC, P for Pauls PC and confirm with enter.\n')
   PC_id = PC_id.upper()
-  if PC_id == 'T' or PC_id == 'P' or PC_id == 'L':
+  if PC_id == 'T' or PC_id == 'PB' or PC_id == 'L' or PC_id == 'P':
     print('You are accessing with PC_id = %s' % (PC_id))
     break
   else:
@@ -115,37 +116,40 @@ AktienDaten = [col_names]
 
 try:
   while True:
-    [Zeit,Tag,Uhrzeit,Stunde,Minute,Sekunde] = get_time()
-    Reihe = [Uhrzeit]
-    for company in companies:
-      Reihe.append(si.get_live_price(company))
-    print(Reihe)
-    AktienDaten.append(Reihe)
-    #print('Tag:',Tag[-3:])
+	try:
+	  [Zeit,Tag,Uhrzeit,Stunde,Minute,Sekunde] = get_time()
+	  Reihe = [Uhrzeit]
+	  for company in companies:
+		Reihe.append(si.get_live_price(company))
+	  print(Reihe)
+	  AktienDaten.append(Reihe)
+	  #print('Tag:',Tag[-3:])
+  
+	  if (Stunde >= 22) or (Stunde <= 14) or (Stunde == 15 and Minute <= 29):
+		[H_wakeup, M_wakeup, S_wakeup] = [15,30,00]
+		[dH,dM,dS] = calc_time_until(H_wakeup,M_wakeup,S_wakeup)
 
-    if (Stunde >= 22) or (Stunde <= 14) or (Stunde == 15 and Minute <= 29):
-      [H_wakeup, M_wakeup, S_wakeup] = [15,30,00]
-      [dH,dM,dS] = calc_time_until(H_wakeup,M_wakeup,S_wakeup)
+		if Tag[-3:] == 'Fri': 
+		  dH += 48      
 
-      if Tag[-3:] == 'Fri': 
-        dH += 48      
+		if Tag[-3:] == 'Sat':    
+		  dH += 24                
 
-      if Tag[-3:] == 'Sat':    
-        dH += 24                
-
-      Schlafzeit = dS + 60*dM + 3600*dH      
-      #print(Schlafzeit)
-      if len(AktienDaten) > 2 and not(Tag[-3:] == 'Sat' or Tag[-3:] == 'Sun'): 
-        make_file(AktienDaten,PC_id,False)                           
-      AktienDaten = [col_names]
-      print('AktienDaten-Array (Zwischenspeicher) geleert.')
-      print('sleeping for %s hours, %s minutes and %s seconds until %02d:%02d:%02d' % (dH,dM,dS,H_wakeup,M_wakeup,S_wakeup))
-      sleeping = True
-      tm.sleep(Schlafzeit)
-      sleeping = False
+		Schlafzeit = dS + 60*dM + 3600*dH      
+		#print(Schlafzeit)
+		if len(AktienDaten) > 2 and not(Tag[-3:] == 'Sat' or Tag[-3:] == 'Sun'): 
+		  make_file(AktienDaten,PC_id,False)                           
+		AktienDaten = [col_names]
+		print('AktienDaten-Array (Zwischenspeicher) geleert.')
+		print('sleeping for %s hours, %s minutes and %s seconds until %02d:%02d:%02d' % (dH,dM,dS,H_wakeup,M_wakeup,S_wakeup))
+		sleeping = True
+		tm.sleep(Schlafzeit)
+		sleeping = False
       
-    tm.sleep(increment)  
-
+	  tm.sleep(increment)  
+	except:
+	  continue
+	  
 except KeyboardInterrupt:
   if sleeping == False:
     make_file(AktienDaten,PC_id,True)
