@@ -26,30 +26,45 @@ def get_time():
   Sekunde = int(Uhrzeit[6:8])
   return([Zeit,Tag,Uhrzeit,Stunde,Minute,Sekunde])
 #------------------------------------------------------------------------
-def calc_time_until(StundeX,MinuteX,SekundeX):
+def calc_time_until(StundeX,MinuteX,SekundeX,WochentagX = None):
   [Zeit,Tag,Uhrzeit,Stunde,Minute,Sekunde] = get_time()
+  Wochentag = Tag[-3:]
+  WT_to_Nr = {'Mon':0,'Tue':1,'Wed':2,'Thu':3,'Fri':4,'Sat':5,'Sun':6}
 
-  dStunde = 0
-  dMinute = 0
-  dSekunde = 0
+  def calc_hour_minute_until(StundeX,MinuteX,SekundeX):
+    dStunde = 0
+    dMinute = 0
+    dSekunde = 0
+  
+    dSekunde += SekundeX - Sekunde
 
-  dSekunde += SekundeX - Sekunde
+    if dSekunde < 0:
+      dMinute -= 1
+      dSekunde += 60
 
-  if dSekunde < 0:
-    dMinute -= 1
-    dSekunde += 60
+    dMinute += MinuteX - Minute
 
-  dMinute += MinuteX - Minute
+    if dMinute < 0:
+      dStunde -= 1
+      dMinute += 60
 
-  if dMinute < 0:
-    dStunde -= 1
-    dMinute += 60
+    dStunde += StundeX - Stunde
+    if dStunde < 0:
+      dStunde += 24
 
-  dStunde += StundeX - Stunde
-  if dStunde < 0:
-    dStunde += 24
+    return [dStunde,dMinute,dSekunde]
+  [dStunde,dMinute,dSekunde] = calc_hour_minute_until(StundeX,MinuteX,SekundeX)
+  if WochentagX == None:
+    return [dStunde,dMinute,dSekunde]
+  elif WochentagX in WT_to_Nr.keys():
+    dWochentag = (WT_to_Nr[WochentagX] - WT_to_Nr[Wochentag])%7
+    if dWochentag == 0 and (3600*StundeX+60*MinuteX+SekundeX - 3600*Stunde+60*Minute+Sekunde < 0):
+      dWochentag += 7
+    dStunde *= dWochentag *24
+    return [dStunde,dMinute,dSekunde]
+  else:
+    print('WochentagX in calctimeuntil does not have the correct form.')
 
-  return [dStunde,dMinute,dSekunde]
 #------------------------------------------------------------------------
 def make_file(Data,PC_id,emergency = None):
   [Zeit,Tag,Uhrzeit,Stunde,Minute,Sekunde] = get_time()
@@ -92,7 +107,26 @@ PB for Pauls Uni Buero, L for Linux-PC, P for Pauls PC and confirm with enter.\n
   else:
     print()
 
+yn_init = input('Input (y/n) for initial sleep timer:')
+if yn_init.upper() == 'Y':
+  WochentagX = input('Input target weekday as Mon/Tue/Wed/Thu/Fri/Sat/Sun: ')
+  StundeX = int(input('Input target hour: '))
+  MinuteX = int(input('Input target minute: '))
+  SekundeX = 0
+  [dStunde,dMinute,dSekunde] = calc_time_until(StundeX,MinuteX,SekundeX,WochentagX = WochentagX)
+  init_sleep = 3600 * dStunde + 60*dMinute + dSekunde
+  print('sleeping until {} {}:{}'.format(WochentagX,StundeX,MinuteX))
+  tm.sleep(init_sleep)
+else:
+  print('Starting with no initial sleep timer.') 
+
+"""
+init_sleep = int(input('set initial sleep timer in hours:'))
+print('sleeping for %s hours' % (init_sleep))
+tm.sleep(init_sleep*3600)
+"""
 companies = []
+
 #------------------------------------------------------------------------
 #---------------------------------INPUT----------------------------------
 #------------------------------------------------------------------------
@@ -112,43 +146,38 @@ for company in companies:
 print(col_names)
 AktienDaten = [col_names] 
 
-#make_file(AktienDaten)
-
 try:
   while True:
-	try:
-	  [Zeit,Tag,Uhrzeit,Stunde,Minute,Sekunde] = get_time()
-	  Reihe = [Uhrzeit]
-	  for company in companies:
-		Reihe.append(si.get_live_price(company))
-	  print(Reihe)
-	  AktienDaten.append(Reihe)
+    try:
+      [Zeit,Tag,Uhrzeit,Stunde,Minute,Sekunde] = get_time()
+      Reihe = [Uhrzeit]
+      for company in companies:
+        Reihe.append(si.get_live_price(company))
+      print(Reihe)
+      AktienDaten.append(Reihe)
 	  #print('Tag:',Tag[-3:])
   
-	  if (Stunde >= 22) or (Stunde <= 14) or (Stunde == 15 and Minute <= 29):
-		[H_wakeup, M_wakeup, S_wakeup] = [15,30,00]
-		[dH,dM,dS] = calc_time_until(H_wakeup,M_wakeup,S_wakeup)
+      if (Stunde >= 22) or (Stunde <= 14) or (Stunde == 15 and Minute <= 29):
+        [H_wakeup, M_wakeup, S_wakeup] = [15,30,00]
+        [dH,dM,dS] = calc_time_until(H_wakeup,M_wakeup,S_wakeup)
 
-		if Tag[-3:] == 'Fri': 
-		  dH += 48      
+        if Tag[-3:] == 'Fri': 
+          dH += 48                  
 
-		if Tag[-3:] == 'Sat':    
-		  dH += 24                
-
-		Schlafzeit = dS + 60*dM + 3600*dH      
+        Schlafzeit = dS + 60*dM + 3600*dH      
 		#print(Schlafzeit)
-		if len(AktienDaten) > 2 and not(Tag[-3:] == 'Sat' or Tag[-3:] == 'Sun'): 
-		  make_file(AktienDaten,PC_id,False)                           
-		AktienDaten = [col_names]
-		print('AktienDaten-Array (Zwischenspeicher) geleert.')
-		print('sleeping for %s hours, %s minutes and %s seconds until %02d:%02d:%02d' % (dH,dM,dS,H_wakeup,M_wakeup,S_wakeup))
-		sleeping = True
-		tm.sleep(Schlafzeit)
-		sleeping = False
+        if len(AktienDaten) > 2 and not(Tag[-3:] == 'Sat' or Tag[-3:] == 'Sun'): 
+          make_file(AktienDaten,PC_id,False)                           
+        AktienDaten = [col_names]
+        print('AktienDaten-Array (Zwischenspeicher) geleert.')
+        print('sleeping for %s hours, %s minutes and %s seconds until %02d:%02d:%02d' % (dH,dM,dS,H_wakeup,M_wakeup,S_wakeup))
+        sleeping = True
+        tm.sleep(Schlafzeit)
+        sleeping = False
       
-	  tm.sleep(increment)  
-	except:
-	  continue
+      tm.sleep(increment)  
+    except:
+      continue
 	  
 except KeyboardInterrupt:
   if sleeping == False:
