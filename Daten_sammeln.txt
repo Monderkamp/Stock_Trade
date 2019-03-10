@@ -96,7 +96,7 @@ def gleitender_Durchschnitt(Anzahl,Tabelle,Spalte):
   Tabelle = np.array(Tabelle)
   return sum(Tabelle[-Anzahl:,Spalte])/Anzahl
 #------------------------------------------------------------------------
-
+sleeping = False
 while True:
   PC_id = input('From which PC are you accessing this program?\nEnter T for Tobis PC, \
 PB for Pauls Uni Buero, L for Linux-PC, P for Pauls PC and confirm with enter.\n')
@@ -116,7 +116,9 @@ if yn_init.upper() == 'Y':
   [dStunde,dMinute,dSekunde] = calc_time_until(StundeX,MinuteX,SekundeX,WochentagX = WochentagX)
   init_sleep = 3600 * dStunde + 60*dMinute + dSekunde
   print('sleeping until {} {}:{}'.format(WochentagX,StundeX,MinuteX))
+  sleeping = True
   tm.sleep(init_sleep)
+  sleeping = False
 else:
   print('Starting with no initial sleep timer.') 
 
@@ -130,16 +132,19 @@ companies = []
 #------------------------------------------------------------------------
 #---------------------------------INPUT----------------------------------
 #------------------------------------------------------------------------
-increment = 5.0  #Intervalle in denen Aktienpreise abgerufen werden in Sekunden
+increment = 10.0  #Intervalle in denen Aktienpreise abgerufen werden in Sekunden
+                  #sollte ca. erfuellen:
+		  #increment > 1.25 * len(companies)
+
 
 companies.append('TSLA') #Tesla
 companies.append('AAPL') #Apple
 companies.append('EA')   #Electronic Arts
 companies.append('GOOG') #Google
-
-
 #------------------------------------------------------------------------
-sleeping = False
+if increment < 1.25*len(companies):
+  print('WARNING: increment < 1.25 * len(companies). Might result in too short sleeping intervals')
+
 col_names = ['Zeit']     #names of columns in table
 for company in companies:
   col_names.append(company)
@@ -149,6 +154,7 @@ AktienDaten = [col_names]
 try:
   while True:
     try:
+      T_0 = tm.time()
       [Zeit,Tag,Uhrzeit,Stunde,Minute,Sekunde] = get_time()
       Reihe = [Uhrzeit]
       for company in companies:
@@ -174,8 +180,9 @@ try:
         sleeping = True
         tm.sleep(Schlafzeit)
         sleeping = False
-      
-      tm.sleep(increment)  
+      T = increment-tm.time()+T_0
+      print('incremental sleep: T = {}\n'.format(T))
+      tm.sleep(T)  
     except:
       continue
 	  
