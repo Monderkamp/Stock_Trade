@@ -58,9 +58,17 @@ def calc_time_until(StundeX,MinuteX,SekundeX,WochentagX = None):
     return [dStunde,dMinute,dSekunde]
   elif WochentagX in WT_to_Nr.keys():
     dWochentag = (WT_to_Nr[WochentagX] - WT_to_Nr[Wochentag])%7
+    print(dWochentag,dStunde)
+    print(StundeX,MinuteX,SekundeX,Stunde,Minute,Sekunde)
     if dWochentag == 0 and (3600*StundeX+60*MinuteX+SekundeX - 3600*Stunde+60*Minute+Sekunde < 0):
       dWochentag += 7
-    dStunde *= dWochentag *24
+    if (3600*StundeX+60*MinuteX+SekundeX - 3600*Stunde-60*Minute-Sekunde > 0):
+      print('fall1')
+      dStunde += (dWochentag) *24
+    elif (3600*StundeX+60*MinuteX+SekundeX - 3600*Stunde-60*Minute-Sekunde < 0):
+      print('fall2')
+      dStunde += ((dWochentag-1) *24)
+
     return [dStunde,dMinute,dSekunde]
   else:
     print('WochentagX in calctimeuntil does not have the correct form.')
@@ -117,7 +125,9 @@ if yn_init.upper() == 'Y':
   init_sleep = 3600 * dStunde + 60*dMinute + dSekunde
   print('sleeping until {} {}:{}'.format(WochentagX,StundeX,MinuteX))
   sleeping = True
+  print(dStunde,dMinute,dSekunde)
   tm.sleep(init_sleep)
+
   sleeping = False
 else:
   print('Starting with no initial sleep timer.') 
@@ -150,7 +160,9 @@ for company in companies:
   col_names.append(company)
 print(col_names)
 AktienDaten = [col_names] 
-
+print(calc_time_until(20,5,00,'Mon'))
+print('selber wochentag, fruehere Zeit funktioniert nicht')
+exit()
 try:
   while True:
     try:
