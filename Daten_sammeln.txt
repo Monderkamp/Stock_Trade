@@ -185,9 +185,9 @@ try:
         [H_wakeup, M_wakeup, S_wakeup] = [15,30,00]
         [dH,dM,dS] = calc_time_until(H_wakeup,M_wakeup,S_wakeup)
 
-        if Tag[-3:] == 'Fri': 
-          dH += 48                  
-
+        if (Tag[-3:] == 'Fri') or (Tag[-3:] == 'Sat') or (Tag[-3:] == 'Sun'): 
+          [dH,dM,dS] = calc_time_until(H_wakeup,M_wakeup,S_wakeup,'Mon')            
+      
         Schlafzeit = dS + 60*dM + 3600*dH      
 		#print(Schlafzeit)
         if len(AktienDaten) > 2 and not(Tag[-3:] == 'Sat' or Tag[-3:] == 'Sun'): 
@@ -201,7 +201,9 @@ try:
       T = increment-tm.time()+T_0
       print('incremental sleep: T = {}\n'.format(T))
       if T > 0:
-        tm.sleep(T)  
+        tm.sleep(T)
+      else: 
+        print('Warning. Total processing time longer than increment.')  
     except:
       continue
 	  
