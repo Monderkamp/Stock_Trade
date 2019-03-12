@@ -15,7 +15,12 @@ import numpy as np
 import pandas as pd
 from yahoo_fin import stock_info as si
 
-directories = { 'L':'/home/gnadt/GitHub Repositories/Stock_Trade/stock price data/', 'PB':'/home/monderkamp/Paul Monderkamp/Stock_Trade/stock price data/Daten von Uni Buero/'} 
+directories =\
+{\ 
+'L':'/home/gnadt/GitHub Repositories/Stock_Trade/stock price data/',\
+'SA':'/home/gnadt/GitHub Repositories/Stock_Trade/stock price data/sechs_aktien/',\
+'PB':'/home/monderkamp/Paul Monderkamp/Stock_Trade/stock price data/Daten von Uni Buero/'\
+} 
 #------------------------------------------------------------------------
 def get_time():
   Zeit = tm.asctime(tm.localtime())
@@ -58,9 +63,17 @@ def calc_time_until(StundeX,MinuteX,SekundeX,WochentagX = None):
     return [dStunde,dMinute,dSekunde]
   elif WochentagX in WT_to_Nr.keys():
     dWochentag = (WT_to_Nr[WochentagX] - WT_to_Nr[Wochentag])%7
-    if dWochentag == 0 and (3600*StundeX+60*MinuteX+SekundeX - 3600*Stunde+60*Minute+Sekunde < 0):
+    #print(dWochentag,dStunde)
+    #print(StundeX,MinuteX,SekundeX,Stunde,Minute,Sekunde)
+    if dWochentag == 0 and (3600*StundeX+60*MinuteX+SekundeX - 3600*Stunde-60*Minute-Sekunde < 0):
       dWochentag += 7
-    dStunde *= dWochentag *24
+    if (3600*StundeX+60*MinuteX+SekundeX - 3600*Stunde-60*Minute-Sekunde > 0):
+      print('fall1')
+      dStunde += (dWochentag) *24
+    elif (3600*StundeX+60*MinuteX+SekundeX - 3600*Stunde-60*Minute-Sekunde < 0):
+      print('fall2')
+      dStunde += ((dWochentag-1) *24)
+
     return [dStunde,dMinute,dSekunde]
   else:
     print('WochentagX in calctimeuntil does not have the correct form.')
@@ -75,7 +88,7 @@ def make_file(Data,PC_id,emergency = None):
     file_name = Tag[0:11] + '_emergency' + '_stock_data.txt'
   else:
     print('invalid use of emergency parameter in function make_file.')
-  if PC_id == 'L' or PC_id == 'PB':
+  if PC_id in directories.keys():
     file_name = directories[PC_id] + file_name
 
   with open(file_name,'w') as f:
@@ -96,12 +109,12 @@ def gleitender_Durchschnitt(Anzahl,Tabelle,Spalte):
   Tabelle = np.array(Tabelle)
   return sum(Tabelle[-Anzahl:,Spalte])/Anzahl
 #------------------------------------------------------------------------
-
+sleeping = False
 while True:
   PC_id = input('From which PC are you accessing this program?\nEnter T for Tobis PC, \
-PB for Pauls Uni Buero, L for Linux-PC, P for Pauls PC and confirm with enter.\n')
+PB for Pauls Uni Buero, L for Linux-PC, SA for sechs_aktien, P for Pauls PC and confirm with enter.\n')
   PC_id = PC_id.upper()
-  if PC_id == 'T' or PC_id == 'PB' or PC_id == 'L' or PC_id == 'P':
+  if PC_id == 'T' or PC_id == 'PB' or PC_id == 'L' or PC_id == 'P' or PC_id == 'SA':
     print('You are accessing with PC_id = %s' % (PC_id))
     break
   else:
@@ -116,7 +129,11 @@ if yn_init.upper() == 'Y':
   [dStunde,dMinute,dSekunde] = calc_time_until(StundeX,MinuteX,SekundeX,WochentagX = WochentagX)
   init_sleep = 3600 * dStunde + 60*dMinute + dSekunde
   print('sleeping until {} {}:{}'.format(WochentagX,StundeX,MinuteX))
+  sleeping = True
+  print(dStunde,dMinute,dSekunde)
   tm.sleep(init_sleep)
+
+  sleeping = False
 else:
   print('Starting with no initial sleep timer.') 
 
@@ -130,25 +147,32 @@ companies = []
 #------------------------------------------------------------------------
 #---------------------------------INPUT----------------------------------
 #------------------------------------------------------------------------
-increment = 5.0  #Intervalle in denen Aktienpreise abgerufen werden in Sekunden
+increment = 10.0  #Intervalle in denen Aktienpreise abgerufen werden in Sekunden
+                  #sollte ca. erfuellen:
+		  #increment > 1.25 * len(companies)
+
 
 companies.append('TSLA') #Tesla
 companies.append('AAPL') #Apple
 companies.append('EA')   #Electronic Arts
 companies.append('GOOG') #Google
-
-
+companies.append('ADS.DU') #ADIDAS AG NA O.N.
+companies.append('DAI.MU') #DAIMLER AG NA O.N.
 #------------------------------------------------------------------------
-sleeping = False
+if increment < 1.25*len(companies):
+  print('WARNING: increment < 1.25 * len(companies). Might result in too short sleeping intervals')
+
 col_names = ['Zeit']     #names of columns in table
 for company in companies:
   col_names.append(company)
 print(col_names)
 AktienDaten = [col_names] 
 
+
 try:
   while True:
     try:
+      T_0 = tm.time()
       [Zeit,Tag,Uhrzeit,Stunde,Minute,Sekunde] = get_time()
       Reihe = [Uhrzeit]
       for company in companies:
@@ -174,8 +198,9 @@ try:
         sleeping = True
         tm.sleep(Schlafzeit)
         sleeping = False
-      
-      tm.sleep(increment)  
+      T = increment-tm.time()+T_0
+      print('incremental sleep: T = {}\n'.format(T))
+      tm.sleep(T)  
     except:
       continue
 	  
