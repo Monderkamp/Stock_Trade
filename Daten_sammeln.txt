@@ -16,7 +16,7 @@ import pandas as pd
 from yahoo_fin import stock_info as si
 
 directories =\
-{\ 
+{\
 'L':'/home/gnadt/GitHub Repositories/Stock_Trade/stock price data/',\
 'SA':'/home/gnadt/GitHub Repositories/Stock_Trade/stock price data/sechs_aktien/',\
 'PB':'/home/monderkamp/Paul Monderkamp/Stock_Trade/stock price data/Daten von Uni Buero/'\
