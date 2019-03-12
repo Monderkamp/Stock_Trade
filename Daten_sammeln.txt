@@ -68,10 +68,10 @@ def calc_time_until(StundeX,MinuteX,SekundeX,WochentagX = None):
     if dWochentag == 0 and (3600*StundeX+60*MinuteX+SekundeX - 3600*Stunde-60*Minute-Sekunde < 0):
       dWochentag += 7
     if (3600*StundeX+60*MinuteX+SekundeX - 3600*Stunde-60*Minute-Sekunde > 0):
-      print('fall1')
+      #print('fall1')
       dStunde += (dWochentag) *24
     elif (3600*StundeX+60*MinuteX+SekundeX - 3600*Stunde-60*Minute-Sekunde < 0):
-      print('fall2')
+      #print('fall2')
       dStunde += ((dWochentag-1) *24)
 
     return [dStunde,dMinute,dSekunde]
@@ -130,7 +130,7 @@ if yn_init.upper() == 'Y':
   init_sleep = 3600 * dStunde + 60*dMinute + dSekunde
   print('sleeping until {} {}:{}'.format(WochentagX,StundeX,MinuteX))
   sleeping = True
-  print(dStunde,dMinute,dSekunde)
+  #print(dStunde,dMinute,dSekunde)
   tm.sleep(init_sleep)
 
   sleeping = False
