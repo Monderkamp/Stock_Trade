@@ -200,7 +200,8 @@ try:
         sleeping = False
       T = increment-tm.time()+T_0
       print('incremental sleep: T = {}\n'.format(T))
-      tm.sleep(T)  
+      if T > 0:
+        tm.sleep(T)  
     except:
       continue
 	  
