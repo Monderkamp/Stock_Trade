@@ -240,6 +240,8 @@ try:
         tm.sleep(T)
       else: 
         print('Warning. Total processing time longer than increment.')  
+        #wenn er das erste mal aufwacht zaehlt er die geschlafene Zeit auch als processing time und gibt deswegen 
+        #eine Warnung aus. das muesste man nochmal beheben
     except:
       continue
 	  
