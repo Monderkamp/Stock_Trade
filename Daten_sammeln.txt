@@ -147,10 +147,17 @@ companies = []
 #------------------------------------------------------------------------
 #---------------------------------INPUT----------------------------------
 #------------------------------------------------------------------------
-increment = 10.0  #Intervalle in denen Aktienpreise abgerufen werden in Sekunden
+increment = 15.0  #Intervalle in denen Aktienpreise abgerufen werden in Sekunden
                   #sollte ca. erfuellen:
 		  #increment > 1.25 * len(companies)
+[H_wakeup, M_wakeup, S_wakeup] = [15,30,00]
+[H_sleep, M_sleep, S_sleep] = [22,00,00]
 
+Sommerzeit = True        #Das gilt nur so lange in den USA Sommerzeit ist (10. Maerz) und hier nicht (31. Maerz)
+                         #sobald hier wieder Uhren umgestellt werden, gleicht sich das aus
+if Sommerzeit == True:
+  H_wakeup -= 1
+  H_sleep -= 1
 
 companies.append('TSLA') #Tesla
 companies.append('AAPL') #Apple
@@ -181,8 +188,8 @@ try:
       AktienDaten.append(Reihe)
 	  #print('Tag:',Tag[-3:])
   
-      if (Stunde >= 22) or (Stunde <= 14) or (Stunde == 15 and Minute <= 29):
-        [H_wakeup, M_wakeup, S_wakeup] = [15,30,00]
+      if (Stunde >= H_sleep) or (Stunde <= H_wakeup-1) or (Stunde == H_wakeup and Minute <= M_wakeup-1):
+
         [dH,dM,dS] = calc_time_until(H_wakeup,M_wakeup,S_wakeup)
 
         if (Tag[-3:] == 'Fri') or (Tag[-3:] == 'Sat') or (Tag[-3:] == 'Sun'): 
