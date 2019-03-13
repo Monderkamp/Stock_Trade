@@ -109,6 +109,12 @@ def gleitender_Durchschnitt(Anzahl,Tabelle,Spalte):
   Tabelle = np.array(Tabelle)
   return sum(Tabelle[-Anzahl:,Spalte])/Anzahl
 #------------------------------------------------------------------------
+def rem_empty_strings(W):
+  for i in range(len(W)):
+    if '' in W:
+      W.remove('')
+  return W
+#------------------------------------------------------------------------
 sleeping = False
 while True:
   PC_id = input('From which PC are you accessing this program?\nEnter T for Tobis PC, \
@@ -164,9 +170,10 @@ companies.append('DAI.MU') #DAIMLER AG NA O.N.
 #------------------------------------------------------------------------
 Sommerzeit_diff = False   
 Monate_to_Nr = {'Jan':1,'Feb':2,'Mar':3,'Apr':4,'May':5,'Jun':6,'Jul':7,'Aug':8,'Sep':9,'Oct':10,'Nov':11,'Dec':12}
-print(get_time()[0].split(' '))
-Monat0 = Monate_to_Nr[get_time()[0].split(' ')[1]]
-Tag0 = int(get_time()[0].split(' ')[2] )
+A = get_time()[0].split(' ')
+A = rem_empty_strings(A)
+Monat0 = Monate_to_Nr[A[1]]
+Tag0 = int(A[2])
 #print(Monat0,Tag0)
 
 if (Monat0 == 3) and (Tag0 > 9 or Tag0 < 31):
@@ -185,6 +192,7 @@ Allerdings soll die Winterzeit ja sowieso heir abgeschafft werden. Daran muessen
 mehr erkenntnisse gibt. ggf einfach nochmal im Herbst 2019 aufpassen. 
 
 ausserdem koennte der split-befehl in Zeile 167 fuer probleme sorgen, wenn die Tage wieder einstellig werden. 
+ich hoffe allerdings dass rem_empty_strings das problem loest, dass '' strings bei doppelten whitespaces auftreten. 
 """
 
 if increment < 1.25*len(companies):
@@ -232,6 +240,8 @@ try:
         tm.sleep(T)
       else: 
         print('Warning. Total processing time longer than increment.')  
+        #wenn er das erste mal aufwacht zaehlt er die geschlafene Zeit auch als processing time und gibt deswegen 
+        #eine Warnung aus. das muesste man nochmal beheben
     except:
       continue
 	  
