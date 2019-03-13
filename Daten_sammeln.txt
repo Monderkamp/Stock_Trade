@@ -153,11 +153,7 @@ increment = 15.0  #Intervalle in denen Aktienpreise abgerufen werden in Sekunden
 [H_wakeup, M_wakeup, S_wakeup] = [15,30,00]
 [H_sleep, M_sleep, S_sleep] = [22,00,00]
 
-Sommerzeit = True        #Das gilt nur so lange in den USA Sommerzeit ist (10. Maerz) und hier nicht (31. Maerz)
-                         #sobald hier wieder Uhren umgestellt werden, gleicht sich das aus
-if Sommerzeit == True:
-  H_wakeup -= 1
-  H_sleep -= 1
+
 
 companies.append('TSLA') #Tesla
 companies.append('AAPL') #Apple
@@ -166,6 +162,31 @@ companies.append('GOOG') #Google
 companies.append('ADS.DU') #ADIDAS AG NA O.N.
 companies.append('DAI.MU') #DAIMLER AG NA O.N.
 #------------------------------------------------------------------------
+Sommerzeit_diff = False   
+Monate_to_Nr = {'Jan':1,'Feb':2,'Mar':3,'Apr':4,'May':5,'Jun':6,'Jul':7,'Aug':8,'Sep':9,'Oct':10,'Nov':11,'Dec':12}
+print(get_time()[0].split(' '))
+Monat0 = Monate_to_Nr[get_time()[0].split(' ')[1]]
+Tag0 = int(get_time()[0].split(' ')[2] )
+#print(Monat0,Tag0)
+
+if (Monat0 == 3) and (Tag0 > 9 or Tag0 < 31):
+  Sommerzeit_diff = True
+
+if Sommerzeit_diff == True:
+  H_wakeup -= 1
+  H_sleep -= 1
+
+"""
+hier muessen wir nochmal was aendern. 
+Die Zeilen hier drueber sorgen nur dafuer dass er richtig startet, 
+wenn in den USA schon die Zeit auf Sommerzeit umgestellt wurde aber hier noch nicht.
+Umstellung auf Winterzeit ist hier nicht drin. 
+Allerdings soll die Winterzeit ja sowieso heir abgeschafft werden. Daran muessen wir nochmal arbeiten, wenn es da
+mehr erkenntnisse gibt. ggf einfach nochmal im Herbst 2019 aufpassen. 
+
+ausserdem koennte der split-befehl in Zeile 167 fuer probleme sorgen, wenn die Tage wieder einstellig werden. 
+"""
+
 if increment < 1.25*len(companies):
   print('WARNING: increment < 1.25 * len(companies). Might result in too short sleeping intervals')
 
