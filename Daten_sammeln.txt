@@ -173,7 +173,7 @@ Monate_to_Nr = {'Jan':1,'Feb':2,'Mar':3,'Apr':4,'May':5,'Jun':6,'Jul':7,'Aug':8,
 A = get_time()[0].split(' ')
 A = rem_empty_strings(A)
 Monat0 = Monate_to_Nr[A[1]]
-Tag0 = int(A[2] )
+Tag0 = int(A[2])
 #print(Monat0,Tag0)
 
 if (Monat0 == 3) and (Tag0 > 9 or Tag0 < 31):
