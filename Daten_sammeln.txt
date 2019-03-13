@@ -170,10 +170,11 @@ companies.append('DAI.MU') #DAIMLER AG NA O.N.
 #------------------------------------------------------------------------
 Sommerzeit_diff = False   
 Monate_to_Nr = {'Jan':1,'Feb':2,'Mar':3,'Apr':4,'May':5,'Jun':6,'Jul':7,'Aug':8,'Sep':9,'Oct':10,'Nov':11,'Dec':12}
-print(get_time()[0].split(' '))
-Monat0 = Monate_to_Nr[get_time()[0].split(' ')[1]]
-Tag0 = int(get_time()[0].split(' ')[2] )
-#print(Monat0,Tag0)
+A = get_time()[0].split(' ')
+A = rem_empty_strings(A)
+Monat0 = Monate_to_Nr[A[1]]
+Tag0 = int(A[2] )
+print(Monat0,Tag0)
 
 if (Monat0 == 3) and (Tag0 > 9 or Tag0 < 31):
   Sommerzeit_diff = True
