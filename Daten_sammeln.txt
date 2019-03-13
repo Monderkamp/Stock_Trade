@@ -109,6 +109,12 @@ def gleitender_Durchschnitt(Anzahl,Tabelle,Spalte):
   Tabelle = np.array(Tabelle)
   return sum(Tabelle[-Anzahl:,Spalte])/Anzahl
 #------------------------------------------------------------------------
+def rem_empty_strings(W):
+  for i in range(len(W)):
+    if '' in W:
+      W.remove('')
+  return W
+#------------------------------------------------------------------------
 sleeping = False
 while True:
   PC_id = input('From which PC are you accessing this program?\nEnter T for Tobis PC, \
@@ -185,6 +191,8 @@ Allerdings soll die Winterzeit ja sowieso heir abgeschafft werden. Daran muessen
 mehr erkenntnisse gibt. ggf einfach nochmal im Herbst 2019 aufpassen. 
 
 ausserdem koennte der split-befehl in Zeile 167 fuer probleme sorgen, wenn die Tage wieder einstellig werden. 
+laesst sich aber leicht loesen, wenn man  mit rem_empty_strings die '' elemente raus haut, die bei 
+doppelten whitespaces entstehen. 
 """
 
 if increment < 1.25*len(companies):
