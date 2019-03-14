@@ -1,0 +1,43 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
+input_file = '2019_Mar_13_stock_data.txt'
+Spalte = int(input('Welche Spalte plotten?'))
+
+def print_lines(A):
+  for line in A:
+    print(line)
+
+def rem_empty_strings(W):
+  for i in range(len(W)):
+    if '' in W:
+      W.remove('')
+  return W
+
+Data = open(input_file,'r').read()
+Data = Data.split('\n')
+Data = rem_empty_strings(Data)
+
+columns = Data[0].split(',')
+
+Data.pop(0)
+
+
+for idx,val in enumerate(Data):
+  Data[idx] = Data[idx].split(',')
+  Data[idx][0] = Data[idx][0][0:8]
+  Data[idx][0] = int(Data[idx][0][0:2]) + int(Data[idx][0][3:5])/60 + int(Data[idx][0][-2:])/3600
+  for idx1,val1 in enumerate(Data[idx]):
+    Data[idx][idx1] = float(Data[idx][idx1])
+print_lines(Data)
+Data = np.array(Data)
+
+plt.plot(Data[:,0],Data[:,Spalte])
+plt.xlabel('T')
+plt.ylabel(columns[Spalte])
+print(columns)
+plt.show()
+
+
+
+
