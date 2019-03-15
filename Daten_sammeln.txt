@@ -132,22 +132,23 @@ while True:
   else:
     print()
 
-yn_init = input('Input (y/n) for initial sleep timer:')
-if yn_init.upper() == 'Y':
-  WochentagX = input('Input target weekday as Mon/Tue/Wed/Thu/Fri/Sat/Sun: ')
-  StundeX = int(input('Input target hour: '))
-  MinuteX = int(input('Input target minute: '))
-  SekundeX = 0
-  [dStunde,dMinute,dSekunde] = calc_time_until(StundeX,MinuteX,SekundeX,WochentagX = WochentagX)
-  init_sleep = 3600 * dStunde + 60*dMinute + dSekunde
-  print('sleeping until {} {}:{}'.format(WochentagX,StundeX,MinuteX))
+while True:
+  yn_init = input('Input (y/n) for initial sleep timer:')
+  if yn_init.upper() == 'Y':
+    WochentagX = input('Input target weekday as Mon/Tue/Wed/Thu/Fri/Sat/Sun: ')
+    StundeX = int(input('Input target hour: '))
+    MinuteX = int(input('Input target minute: '))
+    SekundeX = 0
+    [dStunde,dMinute,dSekunde] = calc_time_until(StundeX,MinuteX,SekundeX,WochentagX = WochentagX)
+    init_sleep = 3600 * dStunde + 60*dMinute + dSekunde
+    print('sleeping until {} {}:{}'.format(WochentagX,StundeX,MinuteX))
 
-  #print(dStunde,dMinute,dSekunde)
-  tm.sleep(init_sleep)
+    #print(dStunde,dMinute,dSekunde)
+    tm.sleep(init_sleep)
+    break
 
-  
-else:
-  print('Starting with no initial sleep timer.') 
+  elif yn_init.upper() == 'N':
+    print('Starting with no initial sleep timer.') 
 
 """
 init_sleep = int(input('set initial sleep timer in hours:'))
