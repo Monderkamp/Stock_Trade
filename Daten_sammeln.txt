@@ -148,7 +148,8 @@ while True:
     break
 
   elif yn_init.upper() == 'N':
-    print('Starting with no initial sleep timer.') 
+    print('Starting with no initial sleep timer.')
+    break 
 
 """
 init_sleep = int(input('set initial sleep timer in hours:'))
