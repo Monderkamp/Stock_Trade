@@ -258,5 +258,3 @@ except KeyboardInterrupt:
   elif sleeping == True:
     print('Program aborted.')
     print('No emergency file generated because program was sleeping.') 
-
-
