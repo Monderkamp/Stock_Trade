@@ -224,13 +224,13 @@ try:
         Reihe.append(si.get_live_price(company))
       print(Reihe)
       AktienDaten.append(Reihe)
-	  #print('Tag:',Tag[-3:])
+      #print('Tag:',Tag[-3:])
   
       if (Stunde >= H_sleep) or (Stunde <= H_wakeup-1) or (Stunde == H_wakeup and Minute <= M_wakeup-1):
 
         [dH,dM,dS] = calc_time_until(H_wakeup,M_wakeup,S_wakeup)
 
-        if (Tag[-3:] == 'Fri' and Stunde >= 22) or (Tag[-3:] == 'Sat') or (Tag[-3:] == 'Sun'): 
+        if (Tag[-3:] == 'Fri' and Stunde >= H_sleep) or (Tag[-3:] == 'Sat') or (Tag[-3:] == 'Sun'): 
           [dH,dM,dS] = calc_time_until(H_wakeup,M_wakeup,S_wakeup,'Mon')            
       
         Schlafzeit = dS + 60*dM + 3600*dH      
