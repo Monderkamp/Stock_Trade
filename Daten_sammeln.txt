@@ -133,7 +133,7 @@ while True:
     print()
 
 while True:
-  yn_init = input('Input (y/n) for initial sleep timer:')
+  yn_init = input('Input (y/n) for initial sleep timer:\n')
   if yn_init.upper() == 'Y':
     WochentagX = input('Input target weekday as Mon/Tue/Wed/Thu/Fri/Sat/Sun: ')
     StundeX = int(input('Input target hour: '))
@@ -148,8 +148,7 @@ while True:
     break
 
   elif yn_init.upper() == 'N':
-    print('Starting with no initial sleep timer.')
-    break 
+    print('Starting with no initial sleep timer.') 
 
 """
 init_sleep = int(input('set initial sleep timer in hours:'))
