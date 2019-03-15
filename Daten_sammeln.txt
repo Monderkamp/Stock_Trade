@@ -124,7 +124,7 @@ while True:
   for key in directories.keys():
     print(key,':',directories[key])
   print()
-  PC_id = input('Specify target directory and PC from one of the keys above and confirm with enter.')
+  PC_id = input('Specify target directory and PC from one of the keys above and confirm with enter.\n')
   PC_id = PC_id.upper()
   if PC_id in directories.keys():
     print('You are accessing with PC_id = %s' % (PC_id))
