@@ -133,7 +133,7 @@ while True:
     print()
 
 while True:
-  yn_init = input('Input (y/n) for initial sleep timer:\n')
+  yn_init = input('Input (y/n) for initial sleep timer: ')
   if yn_init.upper() == 'Y':
     WochentagX = input('Input target weekday as Mon/Tue/Wed/Thu/Fri/Sat/Sun: ')
     StundeX = int(input('Input target hour: '))
