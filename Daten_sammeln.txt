@@ -117,7 +117,10 @@ def rem_empty_strings(W):
 #------------------------------------------------------------------------
 sleeping = False
 while True:
-  PC_id = input('From which PC are you accessing this program?\nEnter T for Tobis PC, \
+  print()
+  print(directories)
+  print()
+  PC_id = input('Specify target directory.\nEnter T for Tobis PC, \
 PB for Pauls Uni Buero, L for Linux-PC, SA for sechs_aktien, P for Pauls PC and confirm with enter.\n')
   PC_id = PC_id.upper()
   if PC_id == 'T' or PC_id == 'PB' or PC_id == 'L' or PC_id == 'P' or PC_id == 'SA':
