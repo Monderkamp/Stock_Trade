@@ -221,7 +221,7 @@ try:
 
         [dH,dM,dS] = calc_time_until(H_wakeup,M_wakeup,S_wakeup)
 
-        if (Tag[-3:] == 'Fri') or (Tag[-3:] == 'Sat') or (Tag[-3:] == 'Sun'): 
+        if (Tag[-3:] == 'Fri' and Stunde >= 22) or (Tag[-3:] == 'Sat') or (Tag[-3:] == 'Sun'): 
           [dH,dM,dS] = calc_time_until(H_wakeup,M_wakeup,S_wakeup,'Mon')            
       
         Schlafzeit = dS + 60*dM + 3600*dH      
