@@ -194,7 +194,7 @@ hier muessen wir nochmal was aendern.
 Die Zeilen hier drueber sorgen nur dafuer dass er richtig startet, 
 wenn in den USA schon die Zeit auf Sommerzeit umgestellt wurde aber hier noch nicht.
 Umstellung auf Winterzeit ist hier nicht drin. 
-Allerdings soll die Winterzeit ja sowieso heir abgeschafft werden. Daran muessen wir nochmal arbeiten, wenn es da
+Allerdings soll die Winterzeit ja sowieso hier abgeschafft werden. Daran muessen wir nochmal arbeiten, wenn es da
 mehr erkenntnisse gibt. ggf einfach nochmal im Herbst 2019 aufpassen. 
 
 ausserdem koennte der split-befehl in Zeile 167 fuer probleme sorgen, wenn die Tage wieder einstellig werden. 
