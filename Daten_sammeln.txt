@@ -19,7 +19,7 @@ directories =\
 {\
 'L':'/home/gnadt/GitHub Repositories/Stock_Trade/stock price data/',\
 'SA':'/home/gnadt/GitHub Repositories/Stock_Trade/stock price data/sechs_aktien/',\
-'PB':'/home/monderkamp/Paul Monderkamp/Stock_Trade/stock price data/Daten von Uni Buero/'\
+#'PB':'/home/monderkamp/Paul Monderkamp/Stock_Trade/stock price data/Daten von Uni Buero/'\
 } 
 #------------------------------------------------------------------------
 def get_time():
@@ -118,12 +118,15 @@ def rem_empty_strings(W):
 sleeping = False
 while True:
   print()
-  print(directories)
   print()
-  PC_id = input('Specify target directory.\nEnter T for Tobis PC, \
-PB for Pauls Uni Buero, L for Linux-PC, SA for sechs_aktien, P for Pauls PC and confirm with enter.\n')
+  print('key',' ','directory')
+  print()
+  for key in directories.keys():
+    print(key,':',directories[key])
+  print()
+  PC_id = input('Specify target directory and PC from one of the keys above and confirm with enter.')
   PC_id = PC_id.upper()
-  if PC_id == 'T' or PC_id == 'PB' or PC_id == 'L' or PC_id == 'P' or PC_id == 'SA':
+  if PC_id in directories.keys():
     print('You are accessing with PC_id = %s' % (PC_id))
     break
   else:
