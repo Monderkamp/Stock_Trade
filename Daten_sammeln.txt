@@ -141,11 +141,11 @@ if yn_init.upper() == 'Y':
   [dStunde,dMinute,dSekunde] = calc_time_until(StundeX,MinuteX,SekundeX,WochentagX = WochentagX)
   init_sleep = 3600 * dStunde + 60*dMinute + dSekunde
   print('sleeping until {} {}:{}'.format(WochentagX,StundeX,MinuteX))
-  sleeping = True
+
   #print(dStunde,dMinute,dSekunde)
   tm.sleep(init_sleep)
 
-  sleeping = False
+  
 else:
   print('Starting with no initial sleep timer.') 
 
@@ -175,6 +175,7 @@ companies.append('ADS.DU') #ADIDAS AG NA O.N.
 companies.append('DAI.MU') #DAIMLER AG NA O.N.
 #------------------------------------------------------------------------
 Sommerzeit_diff = False   
+sleeping = False
 Monate_to_Nr = {'Jan':1,'Feb':2,'Mar':3,'Apr':4,'May':5,'Jun':6,'Jul':7,'Aug':8,'Sep':9,'Oct':10,'Nov':11,'Dec':12}
 A = get_time()[0].split(' ')
 A = rem_empty_strings(A)
@@ -239,15 +240,16 @@ try:
         print('sleeping for %s hours, %s minutes and %s seconds until %02d:%02d:%02d' % (dH,dM,dS,H_wakeup,M_wakeup,S_wakeup))
         sleeping = True
         tm.sleep(Schlafzeit)
-        sleeping = False
-      T = increment-tm.time()+T_0
-      print('incremental sleep: T = {}\n'.format(T))
-      if T > 0:
-        tm.sleep(T)
-      else: 
-        print('Warning. Total processing time longer than increment.')  
-        #wenn er das erste mal aufwacht zaehlt er die geschlafene Zeit auch als processing time und gibt deswegen 
-        #eine Warnung aus. das muesste man nochmal beheben
+      if sleeping == False:
+
+        T = increment-tm.time()+T_0
+        print('incremental sleep: T = {}\n'.format(T))
+        if T > 0:
+          tm.sleep(T)
+        else: 
+          print('Warning. Total processing time longer than increment.')
+      sleeping = False  
+
     except:
       continue
 	  
