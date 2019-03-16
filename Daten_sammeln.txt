@@ -239,7 +239,10 @@ try:
           make_file(AktienDaten,PC_id,False)                           
         AktienDaten = [col_names]
         print('AktienDaten-Array (Zwischenspeicher) geleert.')
-        print('sleeping for %s hours, %s minutes and %s seconds until %02d:%02d:%02d' % (dH,dM,dS,H_wakeup,M_wakeup,S_wakeup))
+        if (Tag[-3:] == 'Fri' and Stunde >= H_sleep): 
+          print('sleeping for %s hours, %s minutes and %s seconds until Mon %02d:%02d:%02d' % (dH,dM,dS,H_wakeup,M_wakeup,S_wakeup))
+        else:
+          print('sleeping for %s hours, %s minutes and %s seconds until %02d:%02d:%02d' % (dH,dM,dS,H_wakeup,M_wakeup,S_wakeup))
         sleeping = True
         tm.sleep(Schlafzeit)
       if sleeping == False:
