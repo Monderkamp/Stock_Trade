@@ -125,6 +125,7 @@ while True:
   for key in directories.keys():
     print(key,':',directories[key])
   print()
+  print('ND refers to no directory and generates a file in the working directory.')
   PC_id = input('Specify target directory and PC from one of the keys above and confirm with enter.\n')
   PC_id = PC_id.upper()
   if PC_id in directories.keys():
