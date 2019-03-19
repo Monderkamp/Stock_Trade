@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-input_file = '2019_Mar_18c_stock_data.txt'
+input_file = '2019_Mar_19_stock_data.txt'
 Spalte = int(input('Welche Spalte plotten?'))
 
 def print_lines(A):
